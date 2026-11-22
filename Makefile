@@ -1,5 +1,5 @@
 # Atajos. Todo corre dentro de Docker.
-.PHONY: up down logs test openapi lock add
+.PHONY: up down logs test openapi lock add localidades
 
 up:       ## Levanta MongoDB y la API (desarrollo, con recarga)
 	docker compose up -d --build
@@ -24,3 +24,6 @@ lock:     ## Re-resuelve y actualiza uv.lock
 
 add:      ## Agrega una dependencia: make add pkg=httpx  (dev: make add pkg="--dev pytest-cov")
 	$(UV) add $(pkg)
+
+localidades: ## Regenera app/data/localidades_bogota.geojson desde Datos Abiertos Bogotá
+	$(UV) run --no-project --with shapely python scripts/preparar_localidades.py
