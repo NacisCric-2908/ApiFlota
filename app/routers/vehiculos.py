@@ -1,9 +1,15 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Query, Response
+from fastapi import APIRouter, Depends, Query, Response, Security
 from pymongo.asynchronous.collection import AsyncCollection
 from pymongo.errors import DuplicateKeyError
 
+from app.core.alcances import (
+    VEHICULOS_ESCRIBIR,
+    VEHICULOS_LEER,
+    cabecera_gateway,
+    oauth2,
+)
 from app.core.errors import ApiError
 from app.db import vehiculos as repo
 from app.db.mongo import obtener_coleccion
@@ -18,7 +24,23 @@ from app.schemas.vehiculo import (
     VehiculoSalida,
 )
 
-router = APIRouter(prefix="/vehiculos", tags=["Vehículos"])
+router = APIRouter(
+    prefix="/vehiculos",
+    tags=["Vehículos"],
+    dependencies=[Security(cabecera_gateway)],
+    responses={
+        401: {"model": ErrorRespuesta, "description": "Falta la cabecera secreta del gateway"},
+        500: {"model": ErrorRespuesta, "description": "Error interno"},
+    },
+)
+
+
+def leer():
+    return Security(oauth2, scopes=[VEHICULOS_LEER])
+
+
+def escribir():
+    return Security(oauth2, scopes=[VEHICULOS_ESCRIBIR])
 
 Coleccion = Annotated[AsyncCollection, Depends(obtener_coleccion)]
 
@@ -33,6 +55,7 @@ def _no_encontrado(vehiculo_id: str) -> ApiError:
 
 @router.get(
     "/{vehiculo_id}",
+    dependencies=[leer()],
     response_model=VehiculoSalida,
     response_model_exclude_none=True,
     summary="Detalle de un vehículo",
@@ -47,6 +70,7 @@ async def detalle(vehiculo_id: str, coleccion: Coleccion):
 
 @router.post(
     "",
+    dependencies=[escribir()],
     response_model=VehiculoSalida,
     response_model_exclude_none=True,
     status_code=201,
@@ -64,6 +88,7 @@ async def crear(datos: VehiculoCrear, respuesta: Response, coleccion: Coleccion)
 
 @router.put(
     "/{vehiculo_id}",
+    dependencies=[escribir()],
     response_model=VehiculoSalida,
     response_model_exclude_none=True,
     summary="Reemplazar un vehículo",
@@ -78,6 +103,7 @@ async def reemplazar(vehiculo_id: str, datos: VehiculoReemplazar, coleccion: Col
 
 @router.delete(
     "/{vehiculo_id}",
+    dependencies=[escribir()],
     status_code=204,
     summary="Eliminar un vehículo (no permitido si está en viaje)",
     responses={**E404, 409: {"model": ErrorRespuesta, "description": "El vehículo está en viaje"}},
@@ -93,6 +119,7 @@ async def eliminar(vehiculo_id: str, coleccion: Coleccion):
 
 @router.patch(
     "/{vehiculo_id}/estado",
+    dependencies=[escribir()],
     response_model=VehiculoSalida,
     response_model_exclude_none=True,
     summary="Cambiar el estado (y opcionalmente ubicación y batería) de forma atómica",
@@ -122,6 +149,7 @@ async def cambiar_estado(vehiculo_id: str, cambio: CambioEstado, coleccion: Cole
 
 @router.get(
     "",
+    dependencies=[leer()],
     response_model=PaginaVehiculos,
     response_model_exclude_none=True,
     summary="Listar vehículos con filtros, cercanía y paginación",
