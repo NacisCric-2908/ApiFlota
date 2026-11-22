@@ -6,6 +6,8 @@ from datetime import datetime, timezone
 from pymongo import ReturnDocument
 from pymongo.asynchronous.collection import AsyncCollection
 
+from app.db.localidades import buscar_por_punto, referencia
+
 CAMPOS = ("tipo", "bateriaPct", "estado", "ubicacion", "actualizadoEn")
 
 
@@ -145,8 +147,6 @@ async def conteo_por_localidad(coleccion: AsyncCollection) -> dict[str, dict[str
 
 async def rellenar_localidades(coleccion: AsyncCollection, localidades: AsyncCollection) -> int:
     """Asigna localidad a vehículos guardados antes de existir ese campo. Devuelve cuántos actualizó."""
-    from app.db.localidades import buscar_por_punto, referencia
-
     actualizados = 0
     async for doc in coleccion.find({"localidad": {"$exists": False}}):
         lng, lat = doc["ubicacion"]["coordinates"]
