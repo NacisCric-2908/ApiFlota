@@ -37,7 +37,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="API Flota - CRUD de Vehiculos",
-    version="0.1.0",
+    version="1.0.0",
     description="Inventario de scooters y bicicletas del clúster Rodar (MongoDB, consultas geoespaciales).",
     lifespan=lifespan,
     # Etiquetas y operationId en ASCII y sin guiones bajos: así los generadores de clientes (Java, Python...)
