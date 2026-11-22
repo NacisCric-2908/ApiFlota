@@ -69,7 +69,7 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="32zc9cVym_vIbCctJuiu-2" parent="1" style="swimlane;whiteSpace=wrap;html=1;" value="Flotas" vertex="1">
+        <mxCell id="32zc9cVym_vIbCctJuiu-2" parent="1" style="swimlane;whiteSpace=wrap;html=1;fillColor=light-dark(#60a917, #1f3a4d);strokeColor=light-dark(#2D7600, #5aa9d6);" value="Flotas" vertex="1">
           <mxGeometry height="370" width="650" x="-640" y="380" as="geometry" />
         </mxCell>
         <mxCell id="32zc9cVym_vIbCctJuiu-3" parent="1" style="swimlane;whiteSpace=wrap;html=1;fillColor=light-dark(#9141ac, #392f3f);strokeColor=light-dark(#9141ac, #9577a3);" value="Cuentas" vertex="1">
@@ -166,6 +166,72 @@
           <mxGeometry relative="1" x="0.2" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
+        </mxCell>
+        <mxCell id="fl-aca" parent="32zc9cVym_vIbCctJuiu-2" style="swimlane;whiteSpace=wrap;html=1;fillColor=light-dark(#b9e0a5, #1f3a4d);strokeColor=#2D7600;" value="Azure Container Apps" vertex="1">
+          <mxGeometry height="260" width="420" x="20" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="fl-aca-g" parent="fl-aca" style="group" value="" vertex="1" connectable="0">
+          <mxGeometry height="100" width="68" x="0" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="fl-aca-icon" parent="fl-aca-g" style="image;aspect=fixed;html=1;align=center;fontSize=12;image=img/lib/azure2/other/Container_App_Environments.svg;points=[[0.5,0,0],[0.5,1,0],[0,0.5,0],[1,0.5,0],[0.98,0.018,0],[0.985,0.977,0],[0.015,0.977,0],[0.02,0.018,0]];labelPerimeter=1;" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;ACA&lt;/font&gt;" vertex="1">
+          <mxGeometry height="68" width="68" x="0" y="0" as="geometry" />
+        </mxCell>
+        <mxCell id="fl-mid-g" parent="fl-aca" style="group" value="" vertex="1" connectable="0">
+          <mxGeometry height="110" width="68" x="100" y="88" as="geometry" />
+        </mxCell>
+        <mxCell id="fl-mid" parent="fl-mid-g" style="image;aspect=fixed;html=1;align=center;fontSize=12;image=img/lib/azure2/other/Worker_Container_App.svg;points=[[0.5,0,0],[0.5,0.97,0],[0,0.482,0],[1,0.478,0],[0.855,0.024,0],[0.825,0.835,0],[0.19,0.974,0],[0.19,0.116,0]];labelPerimeter=1;" value="&lt;div&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;Container&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;Fleet Intelligence (MID)&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px;&quot;&gt;Python + FastAPI&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="66" width="68" x="0" y="0" as="geometry" />
+        </mxCell>
+        <mxCell id="fl-crud-g" parent="fl-aca" style="group" value="" vertex="1" connectable="0">
+          <mxGeometry height="110" width="68" x="280" y="88" as="geometry" />
+        </mxCell>
+        <mxCell id="fl-crud" parent="fl-crud-g" style="image;aspect=fixed;html=1;align=center;fontSize=12;image=img/lib/azure2/other/Worker_Container_App.svg;points=[[0.5,0,0],[0.5,0.97,0],[0,0.482,0],[1,0.478,0],[0.855,0.024,0],[0.825,0.835,0],[0.19,0.974,0],[0.19,0.116,0]];labelPerimeter=1;" value="&lt;div&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;Container&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;Vehicles (CRUD)&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px;&quot;&gt;Python + FastAPI&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="66" width="68" x="0" y="0" as="geometry" />
+        </mxCell>
+        <mxCell id="fl-s2s" edge="1" parent="fl-aca" source="fl-mid" target="fl-crud" style="edgeStyle=none;curved=1;rounded=0;curveGeometry=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;defaultLabelBackgroundColor=page;labelPadding=0 4;startSize=8;endSize=8;" value="S2S">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fl-acr-g" parent="32zc9cVym_vIbCctJuiu-2" style="group" value="" vertex="1" connectable="0">
+          <mxGeometry height="91" width="68" x="560" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="fl-acr" parent="fl-acr-g" style="image;aspect=fixed;html=1;align=center;fontSize=12;image=img/lib/azure2/containers/Container_Registries.svg;points=[[0.499,0,0],[0.56,1,0],[0,0.481,0],[0.935,0.5,0],[0.687,0.076,0],[1,0.902,0],[0.095,0.699,0],[0.088,0.271,0]];labelPerimeter=1;" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;ACR&lt;/font&gt;" vertex="1">
+          <mxGeometry height="61" width="68" x="0" y="0" as="geometry" />
+        </mxCell>
+        <mxCell id="fl-pull" edge="1" parent="32zc9cVym_vIbCctJuiu-2" source="fl-acr" target="fl-aca" style="edgeStyle=none;curved=1;rounded=0;curveGeometry=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;defaultLabelBackgroundColor=page;labelPadding=0 4;startSize=8;endSize=8;" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;Image Pull&lt;/font&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fl-db" parent="32zc9cVym_vIbCctJuiu-2" style="image;aspect=fixed;html=1;align=center;fontSize=12;image=img/lib/azure2/databases/Azure_Cosmos_DB.svg;labelPerimeter=1;" value="&lt;div&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;Azure Cosmos DB&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;for MongoDB (serverless)&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="64" width="64" x="548" y="225" as="geometry" />
+        </mxCell>
+        <mxCell id="fl-crud-db" edge="1" parent="32zc9cVym_vIbCctJuiu-2" source="fl-crud" target="fl-db" style="edgeStyle=none;curved=1;rounded=0;curveGeometry=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;defaultLabelBackgroundColor=page;labelPadding=0 4;startSize=8;endSize=8;" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;CRUD&lt;/font&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fl-mid-gw" edge="1" parent="1" source="fl-mid" target="MWFcyIC0e3DWIs0_HnJI-3" style="edgeStyle=none;curved=1;rounded=0;curveGeometry=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;defaultLabelBackgroundColor=page;labelPadding=0 4;startSize=8;endSize=8;" value="Consulta zonas prohibidas (Viajes y zonas)">
+          <mxGeometry x="0.55" y="-6" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fl-gw-mid" edge="1" parent="1" source="MWFcyIC0e3DWIs0_HnJI-3" target="fl-mid" style="edgeStyle=none;curved=1;rounded=0;curveGeometry=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;defaultLabelBackgroundColor=page;labelPadding=0 4;startSize=8;endSize=8;" value="Recomendaciones y alertas (/flota)">
+          <mxGeometry x="0.05" y="0" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fl-gw-crud" edge="1" parent="1" source="MWFcyIC0e3DWIs0_HnJI-3" target="fl-crud" style="edgeStyle=none;curved=1;rounded=0;curveGeometry=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;defaultLabelBackgroundColor=page;labelPadding=0 4;startSize=8;endSize=8;" value="Reserva y consulta de vehículos (/flota)">
+          <mxGeometry x="0.55" y="0" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fl-ext-clima" parent="1" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;Open-Meteo&lt;br&gt;API de tercero&lt;/font&gt;" vertex="1">
+          <mxGeometry height="80" width="170" x="-610" y="790" as="geometry" />
+        </mxCell>
+        <mxCell id="fl-ext-dir" parent="1" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;Nominatim (OSM)&lt;br&gt;API de tercero&lt;/font&gt;" vertex="1">
+          <mxGeometry height="80" width="170" x="-400" y="790" as="geometry" />
+        </mxCell>
+        <mxCell id="fl-ext-clima-e" edge="1" parent="1" source="fl-crud" target="fl-ext-clima" style="edgeStyle=none;curved=1;rounded=0;curveGeometry=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;defaultLabelBackgroundColor=page;labelPadding=0 4;startSize=8;endSize=8;" value="Clima">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fl-ext-dir-e" edge="1" parent="1" source="fl-crud" target="fl-ext-dir" style="edgeStyle=none;curved=1;rounded=0;curveGeometry=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;defaultLabelBackgroundColor=page;labelPadding=0 4;startSize=8;endSize=8;" value="Geocodificación inversa">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fl-costos" parent="1" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingRight=10;spacingTop=6;fillColor=#fff2cc;strokeColor=#d6b656;arcSize=3;fontSize=12;" value="&lt;b style=&#x27;font-size:14px&#x27;&gt;Presupuesto estimado de Flota en Azure (USD por mes, región East US)&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;table style=&quot;border-collapse:collapse;width:100%;font-size:11px;&quot;&gt;&lt;tr&gt;&lt;th style=&quot;border:1px solid #b09a50;padding:3px 6px;background:#ffe599;text-align:left;&quot;&gt;Recurso&lt;/th&gt;&lt;th style=&quot;border:1px solid #b09a50;padding:3px 6px;background:#ffe599;text-align:left;&quot;&gt;Configuración&lt;/th&gt;&lt;th style=&quot;border:1px solid #b09a50;padding:3px 6px;background:#ffe599;text-align:left;&quot;&gt;USD/mes&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;border:1px solid #b09a50;padding:3px 6px;&quot;&gt;Container Apps × 2 (MID + CRUD)&lt;/td&gt;&lt;td style=&quot;border:1px solid #b09a50;padding:3px 6px;&quot;&gt;Solo consumo · 0,5 vCPU / 1 GiB · mínimo 0 réplicas&lt;/td&gt;&lt;td style=&quot;border:1px solid #b09a50;padding:3px 6px;&quot;&gt;0 *&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;border:1px solid #b09a50;padding:3px 6px;&quot;&gt;Container Registry&lt;/td&gt;&lt;td style=&quot;border:1px solid #b09a50;padding:3px 6px;&quot;&gt;Basic, 10 GiB incluidos · $0,1666 por día&lt;/td&gt;&lt;td style=&quot;border:1px solid #b09a50;padding:3px 6px;&quot;&gt;5,07&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;border:1px solid #b09a50;padding:3px 6px;&quot;&gt;Cosmos DB for MongoDB&lt;/td&gt;&lt;td style=&quot;border:1px solid #b09a50;padding:3px 6px;&quot;&gt;Serverless · $0,25 por millón de RU + $0,25 por GB&lt;/td&gt;&lt;td style=&quot;border:1px solid #b09a50;padding:3px 6px;&quot;&gt;&amp;lt; 1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;border:1px solid #b09a50;padding:3px 6px;&quot;&gt;Open-Meteo y Nominatim&lt;/td&gt;&lt;td style=&quot;border:1px solid #b09a50;padding:3px 6px;&quot;&gt;Gratis, sin llave&lt;/td&gt;&lt;td style=&quot;border:1px solid #b09a50;padding:3px 6px;&quot;&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;border:1px solid #b09a50;padding:3px 6px;&quot;&gt;Log Analytics (logs de Container Apps)&lt;/td&gt;&lt;td style=&quot;border:1px solid #b09a50;padding:3px 6px;&quot;&gt;5 GB gratis al mes, luego $2,30 por GB&lt;/td&gt;&lt;td style=&quot;border:1px solid #b09a50;padding:3px 6px;&quot;&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;border:1px solid #b09a50;padding:3px 6px;&quot;&gt;&lt;b&gt;Total Flota&lt;/b&gt;&lt;/td&gt;&lt;td style=&quot;border:1px solid #b09a50;padding:3px 6px;&quot;&gt;Con $100 alcanza para unos 16 meses&lt;/td&gt;&lt;td style=&quot;border:1px solid #b09a50;padding:3px 6px;&quot;&gt;&lt;b&gt;≈ 6&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;br&gt;&lt;font style=&#x27;font-size:11px&#x27;&gt;* Cupo gratis por suscripción y mes: 180.000 vCPU-s, 360.000 GiB-s y 2 millones de peticiones (≈ 100 h de réplica activa a 0,5 vCPU / 1 GiB). Si se deja una réplica siempre encendida, ≈ $12 al mes por contenedor.&lt;br&gt;Gateway (API Management, plan Consumption, compartido): 1 millón de llamadas gratis al mes y luego $0,035 por cada 10.000.&lt;br&gt;Precios de la Azure Retail Prices API (22-nov-2026), sin impuestos. Verificar que la región esté permitida en Azure for Students.&lt;/font&gt;" vertex="1">
+          <mxGeometry height="290" width="650" x="-640" y="900" as="geometry" />
+        </mxCell>
+        <mxCell id="fl-decisiones" parent="1" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingRight=10;spacingTop=6;fillColor=#fff2cc;strokeColor=#d6b656;arcSize=3;fontSize=12;" value="&lt;b style=&#x27;font-size:14px&#x27;&gt;Decisiones de despliegue de Flota&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;ul style=&#x27;margin:0;padding-left:18px;font-size:11px;&#x27;&gt;&lt;li&gt;&lt;b&gt;Entorno de Container Apps «solo consumo»&lt;/b&gt;, sin perfil Dedicado: ese sí cobra $0,10 por hora fijos.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Escala a cero&lt;/b&gt; (mínimo 0 réplicas): no se paga en reposo, pero la primera petición tras un rato sin uso tarda unos segundos. Antes de la demostración conviene subir a 1 réplica.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Ingreso HTTPS en ambos contenedores.&lt;/b&gt; El gateway llama por HTTPS; la protección es la cabecera &lt;i&gt;X-Gateway-Secret&lt;/i&gt; (el CRUD rechaza con 401 lo que no venga del gateway). La llamada S2S del MID al CRUD también debe enviarla.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Secretos&lt;/b&gt; (MONGO_URI, GATEWAY_SECRET) como secretos de Container Apps, nunca dentro de la imagen.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Cosmos DB for MongoDB (RU), modo Serverless, versión 7.0.&lt;/b&gt; Según la documentación de Microsoft soporta $geoNear, $geoIntersects, $facet, índice 2dsphere y findAndModify, que es lo que usa el CRUD. Usar la cadena de conexión del portal tal cual. &lt;b&gt;Pendiente:&lt;/b&gt; correr las pruebas contra Cosmos antes de la demostración.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Un registro por grupo&lt;/b&gt; (como en este diagrama) suma ≈ $15 al mes entre los tres. Un solo ACR compartido, o GitHub Container Registry, ahorraría ≈ $10 al mes de los $100.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Una sola región&lt;/b&gt; para todos los servicios, para minimizar la latencia entre ellos.&lt;/li&gt;&lt;/ul&gt;" vertex="1">
+          <mxGeometry height="350" width="650" x="-640" y="1210" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
