@@ -34,6 +34,7 @@ def _no_encontrado(vehiculo_id: str) -> ApiError:
 @router.get(
     "/{vehiculo_id}",
     response_model=VehiculoSalida,
+    response_model_exclude_none=True,
     summary="Detalle de un vehículo",
     responses={**E404},
 )
@@ -47,6 +48,7 @@ async def detalle(vehiculo_id: str, coleccion: Coleccion):
 @router.post(
     "",
     response_model=VehiculoSalida,
+    response_model_exclude_none=True,
     status_code=201,
     summary="Crear un vehículo",
     responses={**E400, 409: {"model": ErrorRespuesta, "description": "El id ya existe"}},
@@ -63,6 +65,7 @@ async def crear(datos: VehiculoCrear, respuesta: Response, coleccion: Coleccion)
 @router.put(
     "/{vehiculo_id}",
     response_model=VehiculoSalida,
+    response_model_exclude_none=True,
     summary="Reemplazar un vehículo",
     responses={**E400, **E404},
 )
@@ -91,6 +94,7 @@ async def eliminar(vehiculo_id: str, coleccion: Coleccion):
 @router.patch(
     "/{vehiculo_id}/estado",
     response_model=VehiculoSalida,
+    response_model_exclude_none=True,
     summary="Cambiar el estado (y opcionalmente ubicación y batería) de forma atómica",
     description=(
         "Transiciones válidas: `disponible`→`en_viaje`|`mantenimiento`, "
@@ -119,6 +123,7 @@ async def cambiar_estado(vehiculo_id: str, cambio: CambioEstado, coleccion: Cole
 @router.get(
     "",
     response_model=PaginaVehiculos,
+    response_model_exclude_none=True,
     summary="Listar vehículos con filtros, cercanía y paginación",
     description=(
         "Filtros: `tipo`, `estado`, `bateriaMin`. Cercanía: `lat` y `lng` van juntas; "
