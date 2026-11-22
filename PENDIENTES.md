@@ -29,16 +29,15 @@ Tareas del líder según el documento de requisitos del clúster (sección 8). L
 - [ ] Revisar con los grupos consumidores los pull requests de contratos.
 - [ ] Documentar todo en `GATEWAY.md` (quién es el líder y por qué).
 
-## 3. MID de Flota (repositorio aparte)
+## 3. MID de Flota (repositorio aparte: `ApiFlotaMID`)
 
-Todavía no existe. Mismo método de trabajo: git flow con microcommits, Docker, Python + FastAPI, uv. Su diseño está en la página «Hexagonal - Flota» del `.drawio`.
+**Ya está implementado:** versión 0.1.0 en la rama `develop` de ese repositorio, con `GET /recomendaciones/vehiculo` y `GET /flota/alertas`, arquitectura hexagonal, 148 pruebas, contrato OpenAPI, guía para quienes lo consumen y un simulador de los servicios de los que depende. **Se verificó contra este CRUD (1.0.0)**: mismos vehículos y mismo orden que con el simulador, y `503` si el CRUD está apagado. Su propia lista de pendientes (subirlo a GitHub, CI/CD, desplegar, probar contra Viajes y zonas real) está en el `PENDIENTES.md` de ese repositorio. Lo que sigue afecta a los dos:
 
-- [ ] Crear el repositorio y copiar la estructura base (Dockerfile, compose, `Makefile`, `.env.example`, `/health`, rechazo sin la cabecera del gateway).
-- [ ] `GET /recomendaciones/vehiculo?lat&lng&tipo`: radio 500 m, batería de al menos 25 %, descartar zona prohibida (consulta a Viajes y zonas), `puntaje = distancia − batería × 2`, 3 mejores, `motivo` si no hay candidatos, `503` si Viajes y zonas no responde. **El resultado esperado con los datos semilla está en [docs/semilla.md](docs/semilla.md)** (veh-0014, veh-0022, veh-0008).
-- [ ] `GET /flota/alertas`: batería menor a 15 %, zona prohibida o más de 2 h sin actualizar, con `tipoAlerta` y `prioridad`.
-- [ ] Contrato OpenAPI, pruebas unitarias con simulación de los demás servicios y de los terceros, pipeline y README con la ficha del API de tercero.
-- [ ] La llamada del MID a su CRUD (S2S) debe enviar `X-Gateway-Secret`.
-- [ ] **Decidir dónde viven las APIs de terceros.** Hoy están en el CRUD (`GET /vehiculos/{id}/clima` y `/direccion`) porque así se pidió; el enunciado sugiere que el consumo de un tercero esté en el MID. El paquete `app/externos/` se puede mover tal cual.
+- [x] La llamada del MID a su CRUD (S2S) envía `X-Gateway-Secret` (verificado).
+- [ ] **Confirmar con Viajes y zonas** su `GET /zonas/verificar`: la ruta detrás del gateway (el MID usa `/viajes/zonas/verificar`), la respuesta (el MID usa solo el booleano `permitida`) y el alcance `zonas:leer`.
+- [ ] **El gateway necesita reglas de prefijo distintas para las dos rutas del MID** (`/flota/recomendaciones/vehiculo` se reenvía quitando `/flota`; `/flota/alertas` se reenvía sin quitarlo). Está explicado en la sección 13 de [docs/integracion.md](docs/integracion.md). Si prefieren una regla uniforme, hay que cambiar una ruta del MID (cambio incompatible del contrato).
+- [ ] **Decidir dónde viven las APIs de terceros.** Hoy están en el CRUD (`GET /vehiculos/{id}/clima` y `/direccion`) porque así se pidió; el enunciado sugiere que el consumo de un tercero esté en el MID. El MID no las usa todavía: el clima («recomendar de otra forma si llueve») quedó como idea pendiente (`ClimaPort`). El paquete `app/externos/` se puede mover tal cual.
+- [ ] **Confirmar las decisiones que el enunciado no fija** (una alerta por condición, solo vehículos `disponible`, degradar en las alertas si Viajes y zonas cae): están justificadas en el `PENDIENTES.md` del MID.
 
 ## 4. Coordinar con los otros equipos
 

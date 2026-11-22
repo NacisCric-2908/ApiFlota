@@ -1100,7 +1100,7 @@
         <mxCell id="fh-q2" parent="fh-mid" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fontSize=10;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="«port»&lt;br&gt;ZonasPort&lt;br&gt;verificarPunto(lat, lng)" vertex="1">
           <mxGeometry height="52" width="128" x="892" y="549" as="geometry" />
         </mxCell>
-        <mxCell id="fh-q3" parent="fh-mid" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fontSize=10;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="«port»&lt;br&gt;ClimaPort (opcional)&lt;br&gt;¿está lloviendo?" vertex="1">
+        <mxCell id="fh-q3" parent="fh-mid" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fontSize=10;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="«port»&lt;br&gt;ClimaPort (pendiente)&lt;br&gt;aún no se usa" vertex="1">
           <mxGeometry height="52" width="128" x="892" y="639" as="geometry" />
         </mxCell>
         <mxCell id="fh-q4" parent="fh-mid" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fontSize=10;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="«port»&lt;br&gt;RelojPort&lt;br&gt;ahora()" vertex="1">
@@ -1112,7 +1112,7 @@
         <mxCell id="fh-r2" parent="fh-mid" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fontSize=10;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="«adapter»&lt;br&gt;Cliente HTTP → Gateway → Viajes&lt;br&gt;token, timeout; 503 si cae" vertex="1">
           <mxGeometry height="52" width="128" x="1042" y="549" as="geometry" />
         </mxCell>
-        <mxCell id="fh-r3" parent="fh-mid" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fontSize=10;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="«adapter»&lt;br&gt;Cliente HTTP → CRUD Flota&lt;br&gt;/vehiculos/{id}/clima" vertex="1">
+        <mxCell id="fh-r3" parent="fh-mid" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fontSize=10;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="«adapter»&lt;br&gt;Cliente HTTP → CRUD Flota&lt;br&gt;/clima (pendiente)" vertex="1">
           <mxGeometry height="52" width="128" x="1042" y="639" as="geometry" />
         </mxCell>
         <mxCell id="fh-r4" parent="fh-mid" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fontSize=10;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="«adapter»&lt;br&gt;Reloj del sistema (UTC)&lt;br&gt;en pruebas: reloj simulado" vertex="1">
@@ -1247,7 +1247,7 @@
         <mxCell id="fh-k4-c2" parent="fh-k4" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" value="&lt;b&gt;main.py&lt;/b&gt;&lt;br&gt;&lt;span style=&#x27;font-size:10px&#x27;&gt;ensambla la app y, al arrancar, prepara índices y semilla&lt;/span&gt;" vertex="1">
           <mxGeometry height="58" width="282" x="14" y="170" as="geometry" />
         </mxCell>
-        <mxCell id="fh-decision" parent="1" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fontSize=11;fillColor=#fff2cc;strokeColor=#d6b656;arcSize=3;" value="&lt;b&gt;Decisión de arquitectura&lt;/b&gt;&lt;br&gt;• &lt;b&gt;Sistema:&lt;/b&gt; microservicios detrás de un API Gateway; cada servicio con su propia base de datos (Flota usa MongoDB; Cuentas y Viajes, PostgreSQL).&lt;br&gt;• &lt;b&gt;MID Flota:&lt;/b&gt; hexagonal, porque concentra reglas de negocio que dependen de otros servicios y hay que probarlas aisladas.&lt;br&gt;• &lt;b&gt;CRUD Flota:&lt;/b&gt; en capas, tal como está construido en este repositorio (la regla de transiciones de estado vive en el repositorio, junto a la operación atómica). Si el equipo prefiere hexagonal estricto también aquí, es un refactor acotado.&lt;br&gt;• El MID Flota aún no está implementado: esta página es su diseño." vertex="1">
+        <mxCell id="fh-decision" parent="1" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fontSize=11;fillColor=#fff2cc;strokeColor=#d6b656;arcSize=3;" value="&lt;b&gt;Decisión de arquitectura&lt;/b&gt;&lt;br&gt;• &lt;b&gt;Sistema:&lt;/b&gt; microservicios detrás de un API Gateway; cada servicio con su propia base de datos (Flota usa MongoDB; Cuentas y Viajes, PostgreSQL).&lt;br&gt;• &lt;b&gt;MID Flota:&lt;/b&gt; hexagonal, porque concentra reglas de negocio que dependen de otros servicios y hay que probarlas aisladas.&lt;br&gt;• &lt;b&gt;CRUD Flota:&lt;/b&gt; en capas, tal como está construido en este repositorio (la regla de transiciones de estado vive en el repositorio, junto a la operación atómica). Si el equipo prefiere hexagonal estricto también aquí, es un refactor acotado.&lt;br&gt;• El MID Flota ya está implementado en el repositorio ApiFlotaMID (versión 0.1.0); falta el ClimaPort, marcado como pendiente." vertex="1">
           <mxGeometry height="175" width="650" x="1430" y="700" as="geometry" />
         </mxCell>
       </root>
