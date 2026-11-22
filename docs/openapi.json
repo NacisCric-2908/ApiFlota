@@ -3,7 +3,7 @@
   "info": {
     "title": "API Flota - CRUD de Vehiculos",
     "description": "Inventario de scooters y bicicletas del clúster Rodar (MongoDB, consultas geoespaciales).",
-    "version": "0.1.0"
+    "version": "1.0.0"
   },
   "paths": {
     "/health": {
