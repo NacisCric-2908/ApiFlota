@@ -192,7 +192,7 @@ async def listar(
     estado: Estado | None = None,
     localidad: Annotated[
         str | None,
-        Query(description="Código ('17') o nombre ('La Candelaria', 'candelaria' no; sí 'la-candelaria'), sin importar tildes ni mayúsculas."),
+        Query(description="Código ('17') o nombre ('La Candelaria', 'usaquen'). No distingue tildes ni mayúsculas."),
     ] = None,
     bateriaMin: Annotated[int | None, Query(ge=0, le=100)] = None,
     lat: Annotated[float | None, Query(ge=-90, le=90)] = None,
