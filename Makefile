@@ -26,7 +26,7 @@ add:      ## Agrega una dependencia: make add pkg=httpx  (dev: make add pkg="--d
 	$(UV) add $(pkg)
 
 localidades: ## Regenera app/data/localidades_bogota.geojson desde Datos Abiertos Bogotá
-	$(UV) run --no-project --with shapely python scripts/preparar_localidades.py
+	$(UV) run --no-project --with "shapely>=2.1" python scripts/preparar_localidades.py
 
 docs-semilla: ## Regenera docs/semilla.md desde el código de la semilla
 	docker compose run --rm --no-deps -T -v $(CURDIR)/scripts:/srv/scripts:ro api python -m scripts.generar_docs_semilla > docs/semilla.md
