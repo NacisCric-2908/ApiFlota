@@ -1,7 +1,7 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "API Flota - CRUD de Vehículos",
+    "title": "API Flota - CRUD de Vehiculos",
     "description": "Inventario de scooters y bicicletas del clúster Rodar (MongoDB, consultas geoespaciales).",
     "version": "0.1.0"
   },
@@ -12,7 +12,7 @@
           "Salud"
         ],
         "summary": "Estado del servicio",
-        "operationId": "health_health_get",
+        "operationId": "verificarSalud",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -21,7 +21,7 @@
                 "schema": {
                   "additionalProperties": true,
                   "type": "object",
-                  "title": "Response Health Health Get"
+                  "title": "Response Verificarsalud"
                 }
               }
             }
@@ -32,10 +32,10 @@
     "/vehiculos/{vehiculo_id}": {
       "get": {
         "tags": [
-          "Vehículos"
+          "Vehiculos"
         ],
         "summary": "Detalle de un vehículo",
-        "operationId": "detalle_vehiculos__vehiculo_id__get",
+        "operationId": "obtenerVehiculo",
         "security": [
           {
             "GatewaySecret": []
@@ -102,10 +102,10 @@
       },
       "put": {
         "tags": [
-          "Vehículos"
+          "Vehiculos"
         ],
         "summary": "Reemplazar un vehículo",
-        "operationId": "reemplazar_vehiculos__vehiculo_id__put",
+        "operationId": "reemplazarVehiculo",
         "security": [
           {
             "GatewaySecret": []
@@ -192,10 +192,10 @@
       },
       "delete": {
         "tags": [
-          "Vehículos"
+          "Vehiculos"
         ],
         "summary": "Eliminar un vehículo (no permitido si está en viaje)",
-        "operationId": "eliminar_vehiculos__vehiculo_id__delete",
+        "operationId": "eliminarVehiculo",
         "security": [
           {
             "GatewaySecret": []
@@ -267,10 +267,10 @@
     "/vehiculos": {
       "post": {
         "tags": [
-          "Vehículos"
+          "Vehiculos"
         ],
         "summary": "Crear un vehículo",
-        "operationId": "crear_vehiculos_post",
+        "operationId": "crearVehiculo",
         "security": [
           {
             "GatewaySecret": []
@@ -346,11 +346,11 @@
       },
       "get": {
         "tags": [
-          "Vehículos"
+          "Vehiculos"
         ],
         "summary": "Listar vehículos con filtros, cercanía y paginación",
         "description": "Filtros: `tipo`, `estado`, `localidad`, `bateriaMin`. Cercanía: `lat` y `lng` van juntas; `radioMetros` (500 por defecto) solo se acepta con ellas. Con cercanía, el resultado va del más cercano al más lejano e incluye `distanciaMetros`.",
-        "operationId": "listar_vehiculos_get",
+        "operationId": "listarVehiculos",
         "security": [
           {
             "GatewaySecret": []
@@ -564,11 +564,11 @@
     "/vehiculos/{vehiculo_id}/estado": {
       "patch": {
         "tags": [
-          "Vehículos"
+          "Vehiculos"
         ],
         "summary": "Cambiar el estado (y opcionalmente ubicación y batería) de forma atómica",
         "description": "Transiciones válidas: `disponible`→`en_viaje`|`mantenimiento`, `en_viaje`→`disponible`|`mantenimiento`, `mantenimiento`→`disponible`. Repetir el estado actual responde 409. Si dos peticiones compiten por el mismo vehículo, solo una gana.",
-        "operationId": "cambiar_estado_vehiculos__vehiculo_id__estado_patch",
+        "operationId": "cambiarEstadoVehiculo",
         "security": [
           {
             "GatewaySecret": []
@@ -667,10 +667,10 @@
     "/localidades": {
       "get": {
         "tags": [
-          "Localidades de Bogotá"
+          "Localidades"
         ],
         "summary": "Las 20 localidades de Bogotá con el conteo de vehículos de cada una",
-        "operationId": "listar_localidades_get",
+        "operationId": "listarLocalidades",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -681,7 +681,7 @@
                     "$ref": "#/components/schemas/LocalidadResumen"
                   },
                   "type": "array",
-                  "title": "Response Listar Localidades Get"
+                  "title": "Response Listarlocalidades"
                 }
               }
             }
@@ -722,11 +722,11 @@
     "/localidades/verificar": {
       "get": {
         "tags": [
-          "Localidades de Bogotá"
+          "Localidades"
         ],
         "summary": "¿En qué localidad de Bogotá está un punto?",
         "description": "Siempre responde 200: fuera de Bogotá devuelve `dentroDeBogota: false` y `localidad: null`.",
-        "operationId": "verificar_localidades_verificar_get",
+        "operationId": "verificarLocalidad",
         "security": [
           {
             "GatewaySecret": []
@@ -808,10 +808,10 @@
     "/localidades/{codigo}": {
       "get": {
         "tags": [
-          "Localidades de Bogotá"
+          "Localidades"
         ],
         "summary": "Una localidad con su geometría (Feature GeoJSON)",
-        "operationId": "detalle_localidades__codigo__get",
+        "operationId": "obtenerLocalidad",
         "security": [
           {
             "GatewaySecret": []
@@ -880,11 +880,11 @@
     "/vehiculos/{vehiculo_id}/clima": {
       "get": {
         "tags": [
-          "Entorno del vehículo (APIs de terceros)"
+          "Entorno"
         ],
         "summary": "Clima actual en la ubicación del vehículo (Open-Meteo)",
         "description": "Consulta Open-Meteo con tiempo máximo de 3 s y hasta 2 reintentos; guarda el resultado 10 min. **Plan de degradación:** si Open-Meteo no responde se devuelve el último dato guardado (hasta 3 h) con `origen: cache_desactualizada`; si no hay ninguno, 503 `servicio_externo_no_disponible`.",
-        "operationId": "clima_vehiculos__vehiculo_id__clima_get",
+        "operationId": "obtenerClimaVehiculo",
         "security": [
           {
             "GatewaySecret": []
@@ -963,11 +963,11 @@
     "/vehiculos/{vehiculo_id}/direccion": {
       "get": {
         "tags": [
-          "Entorno del vehículo (APIs de terceros)"
+          "Entorno"
         ],
         "summary": "Dirección de la ubicación del vehículo (Nominatim / OpenStreetMap)",
         "description": "Geocodificación inversa con tiempo máximo de 3 s, hasta 2 reintentos y no más de 1 petición por segundo (política de Nominatim); guarda el resultado 24 h. **Plan de degradación:** si Nominatim falla se devuelve el último dato guardado (hasta 7 días, `origen: cache_desactualizada`) y, si no hay, la localidad del vehículo calculada con datos propios (`origen: local`, solo `direccion` y `fuente`). Solo da 503 si el vehículo tampoco tiene localidad.",
-        "operationId": "direccion_vehiculos__vehiculo_id__direccion_get",
+        "operationId": "obtenerDireccionVehiculo",
         "security": [
           {
             "GatewaySecret": []
@@ -1653,5 +1653,23 @@
         }
       }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "Vehiculos",
+      "description": "Inventario de scooters y bicicletas: CRUD, búsqueda por cercanía y cambio de estado atómico."
+    },
+    {
+      "name": "Localidades",
+      "description": "Las 20 localidades de Bogotá D.C.: en qué localidad está un punto y su geometría."
+    },
+    {
+      "name": "Entorno",
+      "description": "Datos de APIs de terceros sobre la ubicación de un vehículo: clima (Open-Meteo) y dirección (Nominatim)."
+    },
+    {
+      "name": "Salud",
+      "description": "Estado del servicio (público, sin token)."
+    }
+  ]
 }

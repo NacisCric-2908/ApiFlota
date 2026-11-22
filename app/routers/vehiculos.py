@@ -28,7 +28,7 @@ from app.schemas.vehiculo import (
 
 router = APIRouter(
     prefix="/vehiculos",
-    tags=["Vehículos"],
+    tags=["Vehiculos"],
     dependencies=[Security(cabecera_gateway)],
     responses={
         401: {"model": ErrorRespuesta, "description": "Falta la cabecera secreta del gateway"},
@@ -72,6 +72,7 @@ def _no_encontrado(vehiculo_id: str) -> ApiError:
 
 @router.get(
     "/{vehiculo_id}",
+    operation_id="obtenerVehiculo",
     dependencies=[leer()],
     response_model=VehiculoSalida,
     response_model_exclude_none=True,
@@ -87,6 +88,7 @@ async def detalle(vehiculo_id: str, coleccion: Coleccion):
 
 @router.post(
     "",
+    operation_id="crearVehiculo",
     dependencies=[escribir()],
     response_model=VehiculoSalida,
     response_model_exclude_none=True,
@@ -108,6 +110,7 @@ async def crear(
 
 @router.put(
     "/{vehiculo_id}",
+    operation_id="reemplazarVehiculo",
     dependencies=[escribir()],
     response_model=VehiculoSalida,
     response_model_exclude_none=True,
@@ -126,6 +129,7 @@ async def reemplazar(
 
 @router.delete(
     "/{vehiculo_id}",
+    operation_id="eliminarVehiculo",
     dependencies=[escribir()],
     status_code=204,
     summary="Eliminar un vehículo (no permitido si está en viaje)",
@@ -142,6 +146,7 @@ async def eliminar(vehiculo_id: str, coleccion: Coleccion):
 
 @router.patch(
     "/{vehiculo_id}/estado",
+    operation_id="cambiarEstadoVehiculo",
     dependencies=[escribir()],
     response_model=VehiculoSalida,
     response_model_exclude_none=True,
@@ -175,6 +180,7 @@ async def cambiar_estado(
 
 @router.get(
     "",
+    operation_id="listarVehiculos",
     dependencies=[leer()],
     response_model=PaginaVehiculos,
     response_model_exclude_none=True,
