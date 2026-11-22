@@ -201,7 +201,7 @@ Solo en local se envía `X-Gateway-Secret` (el valor de `GATEWAY_SECRET` del `.e
 ```bash
 # Java / Spring Boot
 docker run --rm -v "$PWD:/local" openapitools/openapi-generator-cli generate \
-  -i /local/docs/openapi.json -g java --library restclient -o /local/cliente-flota
+  -i /local/docs/openapi.json -g java --library native -o /local/cliente-flota
 
 # Python
 docker run --rm -v "$PWD:/local" -w /local ghcr.io/astral-sh/uv:python3.12-bookworm-slim \
