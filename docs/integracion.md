@@ -510,13 +510,14 @@ class FlotaClientTest {
 | `POST`, `PUT`, `PATCH`, `DELETE /flota/vehiculos...` | igual | `vehiculos:escribir` | 5 s |
 | `GET /flota/health` | `GET /health` | ninguno (público) | 2 s |
 | `GET /flota/docs`, `/flota/openapi.json` | igual | ninguno (opcional publicarlos) | 5 s |
-| `GET /flota/recomendaciones/vehiculo`, `/flota/alertas` | **MID Flota** (otro servicio; aún no implementado) | por definir | 10 s |
+| `GET /flota/recomendaciones/vehiculo` | **MID Flota** (otro servicio): `GET /recomendaciones/vehiculo`, **quitando** `/flota` | `recomendaciones:leer` (propuesto) | 15 s |
+| `GET /flota/alertas` | **MID Flota**: `GET /flota/alertas`, **sin quitar** `/flota` (la ruta del MID ya empieza por ahí) | `alertas:leer` (propuesto) | 15 s |
 
 Reglas que debe cumplir el gateway **por Flota** (si no, el servicio no funciona o no es seguro):
 
 1. **Agregar `X-Gateway-Secret: <valor>`** a toda petición que reenvíe. El valor es el `GATEWAY_SECRET` configurado en Flota (un secreto por servicio; no es el token de los clientes). Sin esa cabecera, Flota responde `401 gateway_no_autorizado`.
 2. **Descartar `X-Gateway-Secret` si el cliente la trae**, y poner la propia. Si no, un cliente podría falsificarla.
-3. **Quitar el prefijo `/flota`** al reenviar (Flota publica `/vehiculos`, no `/flota/vehiculos`).
+3. **Quitar el prefijo `/flota`** al reenviar (Flota publica `/vehiculos`, no `/flota/vehiculos`). La única excepción es `GET /flota/alertas` del MID, que se reenvía tal cual (ver la tabla). La guía del MID, con todo lo que necesita el gateway de él, es su propio documento de integración.
 4. **Validar token y alcances antes de reenviar.** Flota no los vuelve a validar; solo los declara en el contrato.
 5. **Dejar pasar el estado y el cuerpo de los errores sin cambiarlos** (son JSON con `codigo`, `mensaje` y `detalle`; los consumidores programan contra `codigo`). No los reemplace por páginas HTML.
 6. **Si Flota no responde** (conexión rechazada o espera agotada), responder `503` con el mismo formato de error. El paso 10 de la demostración lo exige.
