@@ -10,7 +10,8 @@ from app.db import localidades as loc_db
 from app.db.mongo import NOMBRE_COLECCION, crear_cliente, preparar_indices
 from app.db.semilla import cargar_semilla_si_vacia
 from app.db.vehiculos import rellenar_localidades
-from app.routers import health, localidades, vehiculos
+from app.externos.contenedor import Externos
+from app.routers import entorno, health, localidades, vehiculos
 
 
 @asynccontextmanager
@@ -21,6 +22,7 @@ async def lifespan(app: FastAPI):
     base = cliente[settings.mongo_db]
     app.state.vehiculos = base[NOMBRE_COLECCION]
     app.state.localidades = base[loc_db.NOMBRE_COLECCION]
+    app.state.externos = Externos(settings)
     # Datos de referencia primero: la validación de «dentro de Bogotá» y la semilla dependen de ellos.
     await loc_db.preparar_indices(app.state.localidades)
     await loc_db.sincronizar(app.state.localidades)
@@ -29,6 +31,7 @@ async def lifespan(app: FastAPI):
     if settings.seed_on_empty:
         await cargar_semilla_si_vacia(app.state.vehiculos, app.state.localidades)
     yield
+    await app.state.externos.cerrar()
     await cliente.close()
 
 
@@ -44,3 +47,4 @@ app.add_middleware(GatewaySecretMiddleware)
 app.include_router(health.router)
 app.include_router(vehiculos.router)
 app.include_router(localidades.router)
+app.include_router(entorno.router)
