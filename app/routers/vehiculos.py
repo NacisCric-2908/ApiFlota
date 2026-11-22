@@ -86,3 +86,31 @@ async def eliminar(vehiculo_id: str, coleccion: Coleccion):
     if resultado == "en_viaje":
         raise ApiError(409, "vehiculo_en_viaje", "No se puede eliminar un vehículo que está en viaje.")
     return Response(status_code=204)
+
+
+@router.patch(
+    "/{vehiculo_id}/estado",
+    response_model=VehiculoSalida,
+    summary="Cambiar el estado (y opcionalmente ubicación y batería) de forma atómica",
+    description=(
+        "Transiciones válidas: `disponible`→`en_viaje`|`mantenimiento`, "
+        "`en_viaje`→`disponible`|`mantenimiento`, `mantenimiento`→`disponible`. "
+        "Repetir el estado actual responde 409. Si dos peticiones compiten por el mismo "
+        "vehículo, solo una gana."
+    ),
+    responses={**E400, **E404, **E409},
+)
+async def cambiar_estado(vehiculo_id: str, cambio: CambioEstado, coleccion: Coleccion):
+    actualizado, actual = await repo.cambiar_estado(
+        coleccion, vehiculo_id, cambio.model_dump(exclude_none=True)
+    )
+    if actualizado:
+        return repo.a_salida(actualizado)
+    if actual is None:
+        raise _no_encontrado(vehiculo_id)
+    raise ApiError(
+        409,
+        "transicion_invalida",
+        f"No se puede pasar de '{actual['estado']}' a '{cambio.estado}'.",
+        {"estadoActual": actual["estado"], "estadoSolicitado": cambio.estado},
+    )
