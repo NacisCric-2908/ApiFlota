@@ -18,6 +18,7 @@ Servicio de inventario de scooters y bicicletas del **Clúster Rodar** (grupo Fl
 | APIs de terceros: fichas, límites, caché, plan de degradación | [docs/terceros.md](docs/terceros.md) |
 | Manejo geoespacial y localidades de Bogotá | [docs/geoespacial.md](docs/geoespacial.md) |
 | Los 30 vehículos semilla (para coordinar zonas con Viajes y zonas) | [docs/semilla.md](docs/semilla.md) |
+| **Diagramas del proyecto** (nube en Azure con costos, flujo general, arquitectura hexagonal y base de datos; documento conjunto con los otros grupos) | [docs/Proyecto Rodar.drawio](docs/Proyecto%20Rodar.drawio) (abrir con diagrams.net) |
 | Cómo trabajar en este repo (git flow, commits, uv, pruebas) | [CONTRIBUTING.md](CONTRIBUTING.md) |
 
 ## Ejecución
