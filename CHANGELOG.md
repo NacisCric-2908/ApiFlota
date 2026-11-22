@@ -29,4 +29,3 @@ Primera versión estable del **API CRUD de Flota** (clúster Rodar).
 - `/health` solo indica que el proceso está vivo; no consulta MongoDB.
 - `docker-compose.yml` trae un `GATEWAY_SECRET` de desarrollo por defecto: debe cambiarse en cada entorno.
 
-[1.0.0]: ../../releases/tag/v1.0.0
