@@ -4,6 +4,7 @@ from fastapi import FastAPI
 
 from app.core.config import get_settings
 from app.core.errors import registrar_manejadores
+from app.core.openapi import instalar_contrato
 from app.core.security import GatewaySecretMiddleware
 from app.db.mongo import NOMBRE_COLECCION, crear_cliente, preparar_indices
 from app.db.semilla import cargar_semilla_si_vacia
@@ -30,6 +31,7 @@ app = FastAPI(
     lifespan=lifespan,
 )
 registrar_manejadores(app)
+instalar_contrato(app)
 app.add_middleware(GatewaySecretMiddleware)
 app.include_router(health.router)
 app.include_router(vehiculos.router)
