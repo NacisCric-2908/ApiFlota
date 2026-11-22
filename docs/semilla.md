@@ -1,6 +1,6 @@
 # Datos semilla de Flota
 
-> Generado con `make docs-semilla` a partir de `app/db/semilla.py`. No editar a mano.
+> Documento generado automáticamente a partir de los datos semilla de Flota. No editar a mano.
 
 Al arrancar con la base vacía el servicio carga **30 vehículos** en una cuadrícula de 6 x 5, con 100 m de separación, centrada en **lat 4.711, lng -74.0721** (las coordenadas de ejemplo del enunciado del clúster; cae en la localidad de Suba). Todos quedan a menos de ~350 m del centro, así que una búsqueda de 500 m desde ese punto los encuentra a todos.
 

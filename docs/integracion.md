@@ -13,7 +13,7 @@ Para los grupos que consumen este servicio (MID de Viajes y zonas, MID de Flota,
 | Prefijo de Flota | `/flota` (el gateway lo quita al reenviar) |
 | `client_id` y secreto de su MID | _por completar (los entrega el líder del gateway a cada grupo)_ |
 | Alcances de Flota | `vehiculos:leer`, `vehiculos:escribir` |
-| Probar sin gateway | Sección 9: levantar Flota local con `make up` |
+| Ambiente de pruebas de Flota | _por completar_ (el mismo gateway, con los 30 vehículos semilla). Ver la sección 9 |
 
 ## 1. Quién usa qué
 
@@ -28,7 +28,7 @@ Para los grupos que consumen este servicio (MID de Viajes y zonas, MID de Flota,
 Toda llamada entre grupos pasa por el **API Gateway**. El servicio no es accesible directamente y rechaza con `401` cualquier petición que no traiga la cabecera `X-Gateway-Secret` correcta (la agrega el gateway al reenviar; **los consumidores no la envían ni la conocen**).
 
 - Este servicio publica sus rutas **sin prefijo** (`/vehiculos`). Se asume que el gateway las expone bajo `/flota` y quita el prefijo al reenviar (`GET {gateway}/flota/vehiculos` llega aquí como `GET /vehiculos`). Confirmarlo con el líder del gateway.
-- Para probar en local, sin gateway: ver la sección 9.
+- **Flota es un servicio independiente, desplegado en la nube.** No hay nada que instalar, clonar ni levantar: se consume por el gateway con el token de su MID. Para probar, vea la sección 9 (ambiente de pruebas) y la sección 12 (respuestas simuladas).
 - **Llamada entre el MID de Flota y su propio CRUD (S2S, dentro del mismo entorno, sin pasar por el gateway):** también debe enviar la cabecera `X-Gateway-Secret` con el valor de `GATEWAY_SECRET` de Flota.
 
 ## 3. Autenticación y alcances
@@ -201,15 +201,19 @@ Datos de APIs de terceros sobre la ubicación del vehículo. Traen `origen` (`ex
 | 503 | `servicio_externo_no_disponible` | Cae un tercero (solo clima y dirección) | `{ "servicio": "open-meteo", "motivo": "http_503" }` |
 | 500 | `error_interno` | Falla inesperada | `{}` |
 
-## 9. Probar en local, sin gateway
+## 9. Probar contra Flota
 
-```bash
-git clone <repo> && cd ApiFlota
-make up                    # MongoDB + API en http://localhost:8000 (con 30 vehículos semilla)
-curl -H "X-Gateway-Secret: cambiar-este-secreto" "http://localhost:8000/vehiculos?tamano=2"
-```
+Flota se consume como un servicio: **no hay que instalar, clonar ni levantar nada**. Hay dos formas de probar su integración:
 
-Solo en local se envía `X-Gateway-Secret` (el valor de `GATEWAY_SECRET` del `.env`). Swagger UI queda en <http://localhost:8000/docs>. Datos semilla: [semilla.md](semilla.md). Para reiniciarlos: `docker compose down -v && make up`.
+1. **Simulando sus respuestas**, para las pruebas unitarias (sección 12). No necesita red ni token.
+2. **Contra el ambiente de pruebas de Flota**, para las pruebas de integración: el mismo gateway y su mismo token, con los 30 vehículos semilla ([semilla.md](semilla.md)). La URL del ambiente la publica el líder del gateway (sección 0).
+
+Reglas para no estorbarse entre grupos en el ambiente de pruebas (los vehículos semilla son compartidos):
+
+- **Cree sus propios vehículos de prueba** en vez de gastar los de la semilla: `POST /vehiculos` (alcance `vehiculos:escribir`) con un `id` que lleve el nombre de su grupo, por ejemplo `viajes-prueba-001`, y una ubicación dentro de Bogotá. Al terminar, libérelo y elimínelo con `DELETE /vehiculos/{id}` (Flota no deja eliminar uno que esté `en_viaje`).
+- Si usa uno de la semilla, **déjelo `disponible` al terminar**.
+- Si quedaron alterados, pida al equipo de Flota que restablezca los datos semilla.
+- Si el gateway publica la documentación interactiva (Swagger UI), estará en `/flota/docs`.
 
 ## 10. Generar un cliente desde el contrato
 
@@ -494,7 +498,7 @@ class FlotaClientTest {
 }
 ```
 
-2. **Usar Flota de verdad, en local.** Para pruebas de integración: `make up` levanta Flota con sus 30 vehículos semilla (sección 9), y `docker compose down -v && make up` los restablece. Las coordenadas y los vehículos concretos están en [semilla.md](semilla.md).
+2. **Usar el ambiente de pruebas de Flota** (sección 9), para las pruebas de integración. Las coordenadas y los vehículos concretos están en [semilla.md](semilla.md).
 
 ## 13. Para el líder del gateway: qué necesita Flota
 

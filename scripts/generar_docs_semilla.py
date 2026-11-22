@@ -142,7 +142,7 @@ def generar() -> str:
         [
             "# Datos semilla de Flota",
             "",
-            "> Generado con `make docs-semilla` a partir de `app/db/semilla.py`. No editar a mano.",
+            "> Documento generado automáticamente a partir de los datos semilla de Flota. No editar a mano.",
             "",
             f"Al arrancar con la base vacía el servicio carga **{len(vehiculos)} vehículos** en una "
             f"cuadrícula de {COLUMNAS} x {FILAS}, con {PASO * 111_320:.0f} m de separación, centrada en "
@@ -218,7 +218,7 @@ def generar_sql() -> str:
         for z in ZONAS
     )
     return f"""-- Zonas semilla que Flota propone a Viajes y zonas (1 prohibida, 1 de recargo, 2 de parqueo).
--- GENERADO con `make docs-semilla` a partir de scripts/generar_docs_semilla.py. No editar a mano.
+-- GENERADO automáticamente a partir de los datos semilla de Flota. No editar a mano.
 --
 -- Requiere haber ejecutado antes cargar_localidades_postgis.sql (usa la tabla bogota para validar).
 -- Uso:  psql "$DATABASE_URL" -f zonas_semilla_postgis.sql

@@ -30,11 +30,11 @@ Paquete de entrega del **API CRUD de Flota** (versión 1.0.0). Está pensado par
 | --- | --- | --- |
 | ¿A qué URL llamo y cómo me autentico? | Al gateway, con un token OAuth2 de su MID. **La URL y las credenciales las publica el líder del gateway** (aún por definir) | [integracion.md §0](integracion.md#0-datos-de-conexión) |
 | ¿Tengo que enviar `X-Gateway-Secret`? | No. Lo agrega el gateway. Solo se envía al probar Flota en local, o en la llamada entre el MID de Flota y su CRUD | [integracion.md §2](integracion.md#2-cómo-se-llega-al-servicio) |
-| ¿Cómo pruebo si Flota no está desplegada? | O la simulan con las respuestas de la sección 12, o la levantan en local con `make up` (30 vehículos listos) | [integracion.md §9 y §12](integracion.md#9-probar-en-local-sin-gateway) |
+| ¿Cómo pruebo mi integración? | Flota es un servicio en la nube: no hay que instalar ni clonar nada. Para pruebas unitarias, simulen sus respuestas (sección 12); para integración, usen el ambiente de pruebas con su token (sección 9) | [integracion.md §9 y §12](integracion.md#9-probar-contra-flota) |
 | ¿Qué vehículos y coordenadas existen? | 30 vehículos en una cuadrícula de 6 × 5 alrededor de lat 4.7110, lng -74.0721 (localidad de Suba) | [semilla.md](semilla.md) |
 | ¿Qué zonas debo sembrar? | Flota propone 4 (1 prohibida, 1 de recargo, 2 de parqueo) con coordenadas, SQL y puntos de prueba | [semilla.md](semilla.md#zonas-propuestas-para-viajes-y-zonas) |
 | ¿Latitud o longitud primero? | **Longitud primero** en GeoJSON, PostGIS y MongoDB (`[lng, lat]`). Los parámetros de consulta son `lat` y `lng` por separado | [geoespacial.md §8](geoespacial.md#8-errores-comunes) |
-| ¿De dónde saco los datos de las localidades y cómo los uso? | Del Distrito (datos abiertos) o ya preparados en `app/data/localidades_bogota.geojson`. Si solo necesita saber en qué localidad está un punto, ni los cargue: llame a `/localidades/verificar` | [geoespacial.md](geoespacial.md) |
+| ¿De dónde saco los datos de las localidades y cómo los uso? | Flota las sirve ya preparadas (`GET /localidades/{codigo}`), o se bajan del Distrito (datos abiertos). Si solo necesita saber en qué localidad está un punto, ni las cargue: llame a `/localidades/verificar` | [geoespacial.md](geoespacial.md) |
 | ¿Por qué Flota rechaza un punto que sí está en Bogotá? | Casi siempre las coordenadas están invertidas: mire `detalle.lat` en el error; si es ≈ -74, están al revés | [geoespacial.md §8](geoespacial.md#8-errores-comunes) |
 | ¿Se pueden poner vehículos fuera de Bogotá? | No: Flota está acotado a Bogotá D.C. (decisión de diseño del grupo). Responde `400 fuera_de_bogota` | [geoespacial.md](geoespacial.md) |
 | ¿Qué pasa si dos viajes piden el mismo vehículo a la vez? | Solo uno gana; el otro recibe `409`. La reserva es una operación atómica | [integracion.md §6](integracion.md#6-referencia-de-endpoints) |
@@ -45,11 +45,10 @@ Paquete de entrega del **API CRUD de Flota** (versión 1.0.0). Está pensado par
 
 ## Versiones del contrato
 
-- La API usa **versionado semántico**. La versión está en `info.version` de [openapi.json](openapi.json) y en la etiqueta `v1.0.0` del repositorio.
+- La API usa **versionado semántico**. La versión está en `info.version` de [openapi.json](openapi.json).
 - Agregar endpoints o campos opcionales sube la versión menor y **no rompe** a nadie.
 - Quitar o renombrar un campo, cambiar un código de error o una regla sube la versión **mayor** y se avisa a los grupos consumidores antes de publicarla.
 
-## Dos cosas que siguen abiertas
+## Una cosa que sigue abierta
 
-1. **Datos de conexión:** la URL del gateway, el token y los `client_id` (sección 0 de la guía) los completa el líder del gateway cuando esté desplegado.
-2. **Acceso al código:** quien necesite levantar Flota en local necesita acceso al repositorio (o a la imagen en el registro de contenedores cuando se publique).
+**Datos de conexión y ambiente de pruebas:** la URL del gateway, el token, los `client_id` y la URL del ambiente de pruebas (sección 0 de la guía) los completa el líder del gateway cuando esté desplegado.
