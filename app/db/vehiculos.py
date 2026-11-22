@@ -83,3 +83,12 @@ async def listar(
     resultado = (await cursor.to_list(length=1))[0]
     total = resultado["total"][0]["n"] if resultado["total"] else 0
     return resultado["items"], total
+
+
+async def eliminar(coleccion: AsyncCollection, vehiculo_id: str) -> str:
+    """Borra de forma atómica salvo que esté en viaje. Devuelve 'eliminado', 'no_existe' o 'en_viaje'."""
+    resultado = await coleccion.delete_one({"_id": vehiculo_id, "estado": {"$ne": "en_viaje"}})
+    if resultado.deleted_count:
+        return "eliminado"
+    existe = await coleccion.count_documents({"_id": vehiculo_id}, limit=1)
+    return "en_viaje" if existe else "no_existe"
