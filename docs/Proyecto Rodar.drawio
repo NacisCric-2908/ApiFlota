@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" pages="4">
+<mxfile host="app.diagrams.net" pages="5">
   <diagram name="Diagrama de nube" id="0y57Azi9G5EGzTOEQfPM">
     <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1000" pageHeight="700" math="0" shadow="0">
       <root>
@@ -598,6 +598,440 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="fl-pg-flujo" name="Flujo general">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="2100" pageHeight="4800" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="fj-titulo" parent="1" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;" value="&lt;b style=&#x27;font-size:20px&#x27;&gt;Flujo general de Rodar&lt;/b&gt;&lt;br&gt;Elegir vehículo → iniciar viaje → finalizar y cobrar. Toda llamada entre servicios pasa por el API Gateway (token + alcances)." vertex="1">
+          <mxGeometry height="60" width="1130" x="0" y="0" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-leyenda" parent="1" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;fontSize=11;fillColor=#ffffff;strokeColor=#999999;" value="&lt;b&gt;Leyenda&lt;/b&gt;&lt;br&gt;▭ proceso · ◇ decisión · ⬭ inicio / fin&lt;br&gt;&lt;span style=&#x27;color:#82b366&#x27;&gt;■&lt;/span&gt; resultado correcto · &lt;span style=&#x27;color:#b85450&#x27;&gt;■&lt;/span&gt; error · &lt;span style=&#x27;color:#d6b656&#x27;&gt;■&lt;/span&gt; advertencia&lt;br&gt;↔ llamada con respuesta · - - ruta alterna" vertex="1">
+          <mxGeometry height="78" width="500" x="1150" y="0" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-carril0" parent="1" style="swimlane;whiteSpace=wrap;html=1;startSize=34;fontSize=13;fillColor=#f5f5f5;strokeColor=#666666;swimlaneFillColor=#fcfcfc;collapsible=0;" value="Usuario / App" vertex="1">
+          <mxGeometry height="4498" width="330" x="0" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-carril1" parent="1" style="swimlane;whiteSpace=wrap;html=1;startSize=34;fontSize=13;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#fcfcfc;collapsible=0;" value="MID Flota" vertex="1">
+          <mxGeometry height="4498" width="330" x="330" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-carril2" parent="1" style="swimlane;whiteSpace=wrap;html=1;startSize=34;fontSize=13;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#fcfcfc;collapsible=0;" value="CRUD Flota" vertex="1">
+          <mxGeometry height="4498" width="330" x="660" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-carril3" parent="1" style="swimlane;whiteSpace=wrap;html=1;startSize=34;fontSize=13;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#fcfcfc;collapsible=0;" value="Viajes y zonas (MID + CRUD)" vertex="1">
+          <mxGeometry height="4498" width="330" x="990" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-carril4" parent="1" style="swimlane;whiteSpace=wrap;html=1;startSize=34;fontSize=13;fillColor=#e1d5e7;strokeColor=#9673a6;swimlaneFillColor=#fcfcfc;collapsible=0;" value="Cuentas (MID + CRUD)" vertex="1">
+          <mxGeometry height="4498" width="330" x="1320" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-banda0" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#999999;fontStyle=1;fontSize=13;align=left;spacingLeft=12;" value="Fase 1 · Elegir vehículo (Flota)" vertex="1">
+          <mxGeometry height="34" width="1650" x="0" y="158" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-u_start" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fontSize=11;strokeWidth=2;fillColor=#f5f5f5;strokeColor=#666666;" value="Pide un vehículo cercano&lt;br&gt;(lat, lng, tipo)" vertex="1">
+          <mxGeometry height="52" width="150" x="12" y="268" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-mf1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#d5e8d4;strokeColor=#82b366;" value="Buscar vehículos disponibles a 500 m o menos" vertex="1">
+          <mxGeometry height="58" width="150" x="342" y="369" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-cf1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#d5e8d4;strokeColor=#82b366;" value="GET /vehiculos?lat&amp;lng&lt;br&gt;&amp;radioMetros&amp;estado=disponible&lt;br&gt;(el más cercano primero)" vertex="1">
+          <mxGeometry height="58" width="150" x="672" y="369" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-mf2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#d5e8d4;strokeColor=#82b366;" value="Descartar los de batería menor a 25 %" vertex="1">
+          <mxGeometry height="58" width="150" x="342" y="473" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-mf3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#d5e8d4;strokeColor=#82b366;" value="Consultar la zona de cada candidato (vía Gateway)" vertex="1">
+          <mxGeometry height="58" width="150" x="342" y="577" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-vz1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="GET /zonas/verificar&lt;br&gt;(Viajes y zonas)" vertex="1">
+          <mxGeometry height="58" width="150" x="1002" y="577" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-mf4" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;" value="¿Viajes y zonas&lt;br&gt;responde?" vertex="1">
+          <mxGeometry height="84" width="150" x="342" y="668" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-mf4n" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fontSize=11;strokeWidth=2;fillColor=#f8cecc;strokeColor=#b85450;" value="503: no se recomienda sin validar zonas" vertex="1">
+          <mxGeometry height="52" width="146" x="502" y="684" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-mf5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#d5e8d4;strokeColor=#82b366;" value="Descartar los que están en zona prohibida" vertex="1">
+          <mxGeometry height="58" width="150" x="342" y="785" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-mf6" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;" value="¿Quedan&lt;br&gt;candidatos?" vertex="1">
+          <mxGeometry height="84" width="150" x="342" y="876" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-mf6n" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fontSize=11;strokeWidth=2;fillColor=#fff2cc;strokeColor=#d6b656;" value="200: lista vacía + motivo" vertex="1">
+          <mxGeometry height="52" width="146" x="502" y="892" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-mf7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#d5e8d4;strokeColor=#82b366;" value="Puntaje = distancia − batería × 2&lt;br&gt;y devolver los 3 mejores" vertex="1">
+          <mxGeometry height="58" width="150" x="342" y="993" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-u_pick" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fontSize=11;strokeWidth=2;fillColor=#d5e8d4;strokeColor=#82b366;" value="Elige un vehículo" vertex="1">
+          <mxGeometry height="52" width="150" x="12" y="996" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e021" edge="1" parent="1" source="fj-u_start" target="fj-mf1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e022" edge="1" parent="1" source="fj-mf1" target="fj-cf1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;startArrow=classic;startFill=1;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e023" edge="1" parent="1" source="fj-mf1" target="fj-mf2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e024" edge="1" parent="1" source="fj-mf2" target="fj-mf3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e025" edge="1" parent="1" source="fj-mf3" target="fj-vz1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;startArrow=classic;startFill=1;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e026" edge="1" parent="1" source="fj-mf3" target="fj-mf4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e027" edge="1" parent="1" source="fj-mf4" target="fj-mf5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;fontStyle=1;" value="Sí">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e028" edge="1" parent="1" source="fj-mf4" target="fj-mf4n" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;fontStyle=1;" value="No">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e029" edge="1" parent="1" source="fj-mf5" target="fj-mf6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e030" edge="1" parent="1" source="fj-mf6" target="fj-mf7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;fontStyle=1;" value="Sí">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e031" edge="1" parent="1" source="fj-mf6" target="fj-mf6n" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;fontStyle=1;" value="No">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e032" edge="1" parent="1" source="fj-mf7" target="fj-u_pick" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-banda10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#999999;fontStyle=1;fontSize=13;align=left;spacingLeft=12;" value="Fase 2 · Iniciar el viaje (Viajes y zonas coordina con Cuentas y Flota)" vertex="1">
+          <mxGeometry height="34" width="1650" x="0" y="1198" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-u_ini" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fontSize=11;strokeWidth=2;fillColor=#f5f5f5;strokeColor=#666666;" value="Solicita iniciar el viaje&lt;br&gt;(usuarioId, vehiculoId)" vertex="1">
+          <mxGeometry height="52" width="150" x="12" y="1308" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Consultar el estado del usuario" vertex="1">
+          <mxGeometry height="58" width="150" x="1002" y="1305" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-c1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#e1d5e7;strokeColor=#9673a6;" value="GET /usuarios/{id}&lt;br&gt;(Cuentas)" vertex="1">
+          <mxGeometry height="58" width="150" x="1332" y="1305" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v2" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=10;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="¿Usuario&lt;br&gt;inactivo?" vertex="1">
+          <mxGeometry height="84" width="150" x="1002" y="1396" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v2s" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fontSize=11;strokeWidth=2;fillColor=#f8cecc;strokeColor=#b85450;" value="Usuario inactivo: no se puede realizar el viaje" vertex="1">
+          <mxGeometry height="52" width="146" x="1162" y="1412" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v3" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=10;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="¿Liquidación&lt;br&gt;pendiente?" vertex="1">
+          <mxGeometry height="84" width="150" x="1002" y="1500" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v3s" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Cobrar la liquidación pendiente (Cuentas)" vertex="1">
+          <mxGeometry height="58" width="146" x="1162" y="1513" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Consultar el saldo del usuario" vertex="1">
+          <mxGeometry height="58" width="150" x="1002" y="1617" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-c2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#e1d5e7;strokeColor=#9673a6;" value="GET /usuarios/{id}/billetera" vertex="1">
+          <mxGeometry height="58" width="150" x="1332" y="1617" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v5" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=10;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="¿Saldo mínimo&lt;br&gt;(5.000 COP)?" vertex="1">
+          <mxGeometry height="84" width="150" x="1002" y="1708" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v5n" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fontSize=11;strokeWidth=2;fillColor=#f8cecc;strokeColor=#b85450;" value="409 saldo_insuficiente" vertex="1">
+          <mxGeometry height="52" width="146" x="1162" y="1724" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Consultar el vehículo (vía Gateway)" vertex="1">
+          <mxGeometry height="58" width="150" x="1002" y="1825" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-cf2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#d5e8d4;strokeColor=#82b366;" value="GET /vehiculos/{id}" vertex="1">
+          <mxGeometry height="58" width="150" x="672" y="1825" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v7" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=10;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="¿Disponible y&lt;br&gt;batería ≥ 15 %?" vertex="1">
+          <mxGeometry height="84" width="150" x="1002" y="1916" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v7n" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fontSize=11;strokeWidth=2;fillColor=#f8cecc;strokeColor=#b85450;" value="409 con el motivo&lt;br&gt;(404 si no existe)" vertex="1">
+          <mxGeometry height="52" width="146" x="1162" y="1932" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Reservar: PATCH /vehiculos/{id}/estado → en_viaje" vertex="1">
+          <mxGeometry height="58" width="150" x="1002" y="2033" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-cf3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#d5e8d4;strokeColor=#82b366;" value="Cambio condicional atómico&lt;br&gt;en MongoDB: solo uno gana" vertex="1">
+          <mxGeometry height="58" width="150" x="672" y="2033" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v9" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=10;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="¿Reserva&lt;br&gt;exitosa?" vertex="1">
+          <mxGeometry height="84" width="150" x="1002" y="2124" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v9n" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fontSize=11;strokeWidth=2;fillColor=#f8cecc;strokeColor=#b85450;" value="409: otro viaje lo tomó&lt;br&gt;(503 si Flota no responde)" vertex="1">
+          <mxGeometry height="52" width="146" x="1162" y="2140" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v10" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Crear el viaje (estado iniciado)" vertex="1">
+          <mxGeometry height="58" width="150" x="1002" y="2241" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v11" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=10;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="¿Se creó&lt;br&gt;el viaje?" vertex="1">
+          <mxGeometry height="84" width="150" x="1002" y="2332" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v11n" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#fff2cc;strokeColor=#d6b656;" value="Compensación: PATCH estado → disponible" vertex="1">
+          <mxGeometry height="58" width="146" x="1162" y="2345" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v11e" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fontSize=11;strokeWidth=2;fillColor=#f8cecc;strokeColor=#b85450;" value="500" vertex="1">
+          <mxGeometry height="52" width="146" x="1162" y="2452" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v12" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fontSize=11;strokeWidth=2;fillColor=#d5e8d4;strokeColor=#82b366;" value="201: viaje iniciado" vertex="1">
+          <mxGeometry height="52" width="150" x="1002" y="2452" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-u_ok" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fontSize=11;strokeWidth=2;fillColor=#d5e8d4;strokeColor=#82b366;" value="Recibe el viaje iniciado" vertex="1">
+          <mxGeometry height="52" width="150" x="12" y="2452" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e059" edge="1" parent="1" source="fj-u_pick" target="fj-u_ini" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e060" edge="1" parent="1" source="fj-u_ini" target="fj-v1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e061" edge="1" parent="1" source="fj-v1" target="fj-c1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;startArrow=classic;startFill=1;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e062" edge="1" parent="1" source="fj-v1" target="fj-v2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e063" edge="1" parent="1" source="fj-v2" target="fj-v3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;fontStyle=1;" value="No">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e064" edge="1" parent="1" source="fj-v2" target="fj-v2s" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;fontStyle=1;" value="Sí">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e065" edge="1" parent="1" source="fj-v3" target="fj-v4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;fontStyle=1;" value="No">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e066" edge="1" parent="1" source="fj-v3" target="fj-v3s" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;fontStyle=1;" value="Sí">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e067" edge="1" parent="1" source="fj-v3s" target="fj-v4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e068" edge="1" parent="1" source="fj-v4" target="fj-c2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;startArrow=classic;startFill=1;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e069" edge="1" parent="1" source="fj-v4" target="fj-v5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e070" edge="1" parent="1" source="fj-v5" target="fj-v6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;fontStyle=1;" value="Sí">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e071" edge="1" parent="1" source="fj-v5" target="fj-v5n" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;fontStyle=1;" value="No">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e072" edge="1" parent="1" source="fj-v6" target="fj-cf2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;startArrow=classic;startFill=1;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e073" edge="1" parent="1" source="fj-v6" target="fj-v7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e074" edge="1" parent="1" source="fj-v7" target="fj-v8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;fontStyle=1;" value="Sí">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e075" edge="1" parent="1" source="fj-v7" target="fj-v7n" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;fontStyle=1;" value="No">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e076" edge="1" parent="1" source="fj-v8" target="fj-cf3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;startArrow=classic;startFill=1;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e077" edge="1" parent="1" source="fj-v8" target="fj-v9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e078" edge="1" parent="1" source="fj-v9" target="fj-v10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;fontStyle=1;" value="Sí">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e079" edge="1" parent="1" source="fj-v9" target="fj-v9n" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;fontStyle=1;" value="No">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e080" edge="1" parent="1" source="fj-v10" target="fj-v11" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e081" edge="1" parent="1" source="fj-v11" target="fj-v12" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;fontStyle=1;" value="Sí">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e082" edge="1" parent="1" source="fj-v11" target="fj-v11n" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;fontStyle=1;" value="No">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e083" edge="1" parent="1" source="fj-v11n" target="fj-v11e" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e084" edge="1" parent="1" source="fj-v12" target="fj-u_ok" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-banda24" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#999999;fontStyle=1;fontSize=13;align=left;spacingLeft=12;" value="Fase 3 · Finalizar el viaje y cobrar" vertex="1">
+          <mxGeometry height="34" width="1650" x="0" y="2654" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-u_fin" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fontSize=11;strokeWidth=2;fillColor=#f5f5f5;strokeColor=#666666;" value="Finaliza el viaje en (lat, lng)" vertex="1">
+          <mxGeometry height="52" width="150" x="12" y="2764" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v13" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Calcular los minutos desde inicio_en" vertex="1">
+          <mxGeometry height="58" width="150" x="1002" y="2761" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v14" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Validar que el punto esté en Bogotá (propuesto)" vertex="1">
+          <mxGeometry height="58" width="150" x="1002" y="2865" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-cf5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#d5e8d4;strokeColor=#82b366;" value="GET /localidades/verificar" vertex="1">
+          <mxGeometry height="58" width="150" x="672" y="2865" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v15" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=10;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="¿Dentro de&lt;br&gt;Bogotá?" vertex="1">
+          <mxGeometry height="84" width="150" x="1002" y="2956" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v15n" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fontSize=11;strokeWidth=2;fillColor=#f8cecc;strokeColor=#b85450;" value="400: el viaje sigue iniciado" vertex="1">
+          <mxGeometry height="52" width="146" x="1162" y="2972" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v16" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=10;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="¿Zona final&lt;br&gt;prohibida?" vertex="1">
+          <mxGeometry height="84" width="150" x="1002" y="3060" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v16s" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#fff2cc;strokeColor=#d6b656;" value="multa = true&lt;br&gt;(el viaje igual finaliza)" vertex="1">
+          <mxGeometry height="58" width="146" x="1162" y="3073" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v17" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Guardar el viaje como finalizado" vertex="1">
+          <mxGeometry height="58" width="150" x="1002" y="3177" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v18" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Liberar el vehículo: PATCH estado → disponible + ubicación + batería" vertex="1">
+          <mxGeometry height="58" width="150" x="1002" y="3281" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-cf6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#d5e8d4;strokeColor=#82b366;" value="Actualiza estado y ubicación,&lt;br&gt;recalcula la localidad&lt;br&gt;(batería = máx(0, b − min × 0,5))" vertex="1">
+          <mxGeometry height="58" width="150" x="672" y="3281" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v19" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="POST /liquidaciones (viajeId)" vertex="1">
+          <mxGeometry height="58" width="150" x="1002" y="3385" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v19n" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fontSize=11;strokeWidth=2;fillColor=#fff2cc;strokeColor=#d6b656;" value="Cuentas no responde:&lt;br&gt;200 con liquidación pendiente&lt;br&gt;+ advertencia" vertex="1">
+          <mxGeometry height="52" width="146" x="1162" y="3492" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-c3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#e1d5e7;strokeColor=#9673a6;" value="Consultar el viaje y la zona de destino" vertex="1">
+          <mxGeometry height="58" width="150" x="1332" y="3385" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-c4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#e1d5e7;strokeColor=#9673a6;" value="Tarifa = 1.000 + minutos × 350" vertex="1">
+          <mxGeometry height="58" width="150" x="1332" y="3489" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-c5" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=10;fillColor=#e1d5e7;strokeColor=#9673a6;" value="¿Zona de&lt;br&gt;recargo?" vertex="1">
+          <mxGeometry height="84" width="150" x="1332" y="3580" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-c5s" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#e1d5e7;strokeColor=#9673a6;" value="+ 20 %" vertex="1">
+          <mxGeometry height="58" width="146" x="1492" y="3593" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-c6" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=10;fillColor=#e1d5e7;strokeColor=#9673a6;" value="¿Primer viaje&lt;br&gt;finalizado?" vertex="1">
+          <mxGeometry height="84" width="150" x="1332" y="3788" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-c6s" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#e1d5e7;strokeColor=#9673a6;" value="− 50 % sobre la tarifa sin recargo" vertex="1">
+          <mxGeometry height="58" width="146" x="1492" y="3801" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-c7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#e1d5e7;strokeColor=#9673a6;" value="Débito con referencia = viajeId (idempotente)" vertex="1">
+          <mxGeometry height="58" width="150" x="1332" y="3905" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-c8" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontSize=10;fillColor=#e1d5e7;strokeColor=#9673a6;" value="¿Saldo&lt;br&gt;alcanza?" vertex="1">
+          <mxGeometry height="84" width="150" x="1332" y="3996" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-c8n" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fontSize=11;strokeWidth=2;fillColor=#f8cecc;strokeColor=#b85450;" value="409 saldo_insuficiente&lt;br&gt;liquidación pendiente" vertex="1">
+          <mxGeometry height="52" width="146" x="1492" y="4012" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-c9" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fontSize=11;strokeWidth=2;fillColor=#d5e8d4;strokeColor=#82b366;" value="Desglose: tarifaBase, recargo, descuento, total, saldoRestante" vertex="1">
+          <mxGeometry height="52" width="150" x="1332" y="4116" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-v21" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fontSize=11;strokeWidth=2;fillColor=#d5e8d4;strokeColor=#82b366;" value="200: minutos, zona final y liquidación" vertex="1">
+          <mxGeometry height="52" width="150" x="1002" y="4324" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-u_end" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fontSize=11;strokeWidth=2;fillColor=#d5e8d4;strokeColor=#82b366;" value="Ve minutos, zona final y liquidación" vertex="1">
+          <mxGeometry height="52" width="150" x="12" y="4324" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e111" edge="1" parent="1" source="fj-u_ok" target="fj-u_fin" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e112" edge="1" parent="1" source="fj-u_fin" target="fj-v13" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e113" edge="1" parent="1" source="fj-v13" target="fj-v14" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e114" edge="1" parent="1" source="fj-v14" target="fj-cf5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;startArrow=classic;startFill=1;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e115" edge="1" parent="1" source="fj-v14" target="fj-v15" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e116" edge="1" parent="1" source="fj-v15" target="fj-v16" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;fontStyle=1;" value="Sí">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e117" edge="1" parent="1" source="fj-v15" target="fj-v15n" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;fontStyle=1;" value="No">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e118" edge="1" parent="1" source="fj-v16" target="fj-v17" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;fontStyle=1;" value="No">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e119" edge="1" parent="1" source="fj-v16" target="fj-v16s" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;fontStyle=1;" value="Sí">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e120" edge="1" parent="1" source="fj-v16s" target="fj-v17" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e121" edge="1" parent="1" source="fj-v17" target="fj-v18" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e122" edge="1" parent="1" source="fj-v18" target="fj-cf6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;startArrow=classic;startFill=1;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e123" edge="1" parent="1" source="fj-v18" target="fj-v19" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e124" edge="1" parent="1" source="fj-v19" target="fj-c3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e125" edge="1" parent="1" source="fj-v19" target="fj-v19n" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;dashed=1;fontStyle=1;" value="sin respuesta">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e126" edge="1" parent="1" source="fj-c3" target="fj-c4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e127" edge="1" parent="1" source="fj-c4" target="fj-c5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e128" edge="1" parent="1" source="fj-c5" target="fj-c6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;fontStyle=1;" value="No">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e129" edge="1" parent="1" source="fj-c5" target="fj-c5s" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;fontStyle=1;" value="Sí">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e130" edge="1" parent="1" source="fj-c5s" target="fj-c6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e131" edge="1" parent="1" source="fj-c6" target="fj-c7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;fontStyle=1;" value="No">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e132" edge="1" parent="1" source="fj-c6" target="fj-c6s" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;fontStyle=1;" value="Sí">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e133" edge="1" parent="1" source="fj-c6s" target="fj-c7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e134" edge="1" parent="1" source="fj-c7" target="fj-c8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e135" edge="1" parent="1" source="fj-c8" target="fj-c9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;labelBackgroundColor=default;fontStyle=1;" value="Sí">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e136" edge="1" parent="1" source="fj-c8" target="fj-c8n" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;fontStyle=1;" value="No">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e137" edge="1" parent="1" source="fj-c9" target="fj-v21" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e138" edge="1" parent="1" source="fj-v19n" target="fj-v21" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;dashed=1;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-e139" edge="1" parent="1" source="fj-v21" target="fj-u_end" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=11;strokeColor=#444444;endArrow=classic;endFill=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;labelBackgroundColor=default;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-nota1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fontSize=11;fillColor=#fff2cc;strokeColor=#d6b656;arcSize=4;" value="&lt;b&gt;De dónde sale este flujo&lt;/b&gt;&lt;br&gt;La fase 2 respeta el flujo que ya dibujaron Viajes y Cuentas (página «Cuentas y Viajes»: usuario inactivo, liquidación pendiente, saldo) y le agrega la parte de Flota (consultar y reservar el vehículo). Las reglas de cada paso están en el documento de requisitos del clúster." vertex="1">
+          <mxGeometry height="150" width="330" x="1680" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="fj-nota2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fontSize=11;fillColor=#f8cecc;strokeColor=#b85450;arcSize=4;" value="&lt;b&gt;Propuesto: validar el punto final&lt;/b&gt;&lt;br&gt;«Validar que el punto esté en Bogotá» (fase 3) no está en el enunciado. Flota rechaza con 400 una ubicación fuera de Bogotá al liberar el vehículo; si Viajes y zonas ya guardó el viaje como finalizado, quedaría inconsistente. Por eso se propone validar antes de guardar. Acordar con Viajes y zonas." vertex="1">
+          <mxGeometry height="175" width="330" x="1680" y="260" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
