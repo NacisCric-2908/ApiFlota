@@ -17,6 +17,8 @@ COPY app ./app
 FROM base AS test
 RUN uv sync --frozen --no-install-project
 COPY pytest.ini ./
+COPY docs ./docs
+COPY scripts ./scripts
 COPY tests ./tests
 USER app
 CMD ["pytest", "-q"]
