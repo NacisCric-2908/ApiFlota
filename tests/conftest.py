@@ -30,6 +30,11 @@ def coleccion(cliente):
 
 
 @pytest.fixture
+def localidades(cliente):
+    return app.state.localidades
+
+
+@pytest.fixture
 def payload():
     """Fábrica de cuerpos válidos para crear vehículos; acepta sobreescrituras."""
 

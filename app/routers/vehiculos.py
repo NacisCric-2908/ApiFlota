@@ -12,12 +12,14 @@ from app.core.alcances import (
 )
 from app.core.errors import ApiError
 from app.db import vehiculos as repo
-from app.db.mongo import obtener_coleccion
+from app.db.localidades import buscar_por_punto, referencia, slug
+from app.db.mongo import obtener_coleccion, obtener_localidades
 from app.schemas.error import ErrorRespuesta
 from app.schemas.vehiculo import (
     CambioEstado,
     Estado,
     PaginaVehiculos,
+    Punto,
     Tipo,
     VehiculoCrear,
     VehiculoReemplazar,
@@ -43,10 +45,25 @@ def escribir():
     return Security(oauth2, scopes=[VEHICULOS_ESCRIBIR])
 
 Coleccion = Annotated[AsyncCollection, Depends(obtener_coleccion)]
+Localidades = Annotated[AsyncCollection, Depends(obtener_localidades)]
 
 E400 = {400: {"model": ErrorRespuesta, "description": "Datos o parámetros inválidos"}}
 E404 = {404: {"model": ErrorRespuesta, "description": "Vehículo no encontrado"}}
 E409 = {409: {"model": ErrorRespuesta, "description": "Conflicto de estado"}}
+
+
+async def resolver_localidad(localidades: AsyncCollection, punto: Punto) -> dict:
+    """El servicio está cerrado a Bogotá D.C.: una ubicación fuera de sus 20 localidades se rechaza."""
+    lng, lat = punto.coordinates
+    loc = await buscar_por_punto(localidades, lng, lat)
+    if loc is None:
+        raise ApiError(
+            400,
+            "fuera_de_bogota",
+            "La ubicación está fuera de Bogotá D.C.",
+            {"lat": lat, "lng": lng},
+        )
+    return referencia(loc)
 
 
 def _no_encontrado(vehiculo_id: str) -> ApiError:
@@ -77,9 +94,12 @@ async def detalle(vehiculo_id: str, coleccion: Coleccion):
     summary="Crear un vehículo",
     responses={**E400, 409: {"model": ErrorRespuesta, "description": "El id ya existe"}},
 )
-async def crear(datos: VehiculoCrear, respuesta: Response, coleccion: Coleccion):
+async def crear(
+    datos: VehiculoCrear, respuesta: Response, coleccion: Coleccion, localidades: Localidades
+):
+    localidad = await resolver_localidad(localidades, datos.ubicacion)
     try:
-        doc = await repo.crear(coleccion, datos.model_dump())
+        doc = await repo.crear(coleccion, {**datos.model_dump(), "localidad": localidad})
     except DuplicateKeyError:
         raise ApiError(409, "vehiculo_duplicado", f"Ya existe el vehículo '{datos.id}'.") from None
     respuesta.headers["Location"] = f"/vehiculos/{doc['_id']}"
@@ -94,8 +114,11 @@ async def crear(datos: VehiculoCrear, respuesta: Response, coleccion: Coleccion)
     summary="Reemplazar un vehículo",
     responses={**E400, **E404},
 )
-async def reemplazar(vehiculo_id: str, datos: VehiculoReemplazar, coleccion: Coleccion):
-    doc = await repo.reemplazar(coleccion, vehiculo_id, datos.model_dump())
+async def reemplazar(
+    vehiculo_id: str, datos: VehiculoReemplazar, coleccion: Coleccion, localidades: Localidades
+):
+    localidad = await resolver_localidad(localidades, datos.ubicacion)
+    doc = await repo.reemplazar(coleccion, vehiculo_id, {**datos.model_dump(), "localidad": localidad})
     if doc is None:
         raise _no_encontrado(vehiculo_id)
     return repo.a_salida(doc)
@@ -131,10 +154,13 @@ async def eliminar(vehiculo_id: str, coleccion: Coleccion):
     ),
     responses={**E400, **E404, **E409},
 )
-async def cambiar_estado(vehiculo_id: str, cambio: CambioEstado, coleccion: Coleccion):
-    actualizado, actual = await repo.cambiar_estado(
-        coleccion, vehiculo_id, cambio.model_dump(exclude_none=True)
-    )
+async def cambiar_estado(
+    vehiculo_id: str, cambio: CambioEstado, coleccion: Coleccion, localidades: Localidades
+):
+    datos = cambio.model_dump(exclude_none=True)
+    if cambio.ubicacion:  # si se mueve, hay que recalcular la localidad (y debe seguir en Bogotá)
+        datos["localidad"] = await resolver_localidad(localidades, cambio.ubicacion)
+    actualizado, actual = await repo.cambiar_estado(coleccion, vehiculo_id, datos)
     if actualizado:
         return repo.a_salida(actualizado)
     if actual is None:
@@ -154,7 +180,7 @@ async def cambiar_estado(vehiculo_id: str, cambio: CambioEstado, coleccion: Cole
     response_model_exclude_none=True,
     summary="Listar vehículos con filtros, cercanía y paginación",
     description=(
-        "Filtros: `tipo`, `estado`, `bateriaMin`. Cercanía: `lat` y `lng` van juntas; "
+        "Filtros: `tipo`, `estado`, `localidad`, `bateriaMin`. Cercanía: `lat` y `lng` van juntas; "
         "`radioMetros` (500 por defecto) solo se acepta con ellas. Con cercanía, el resultado "
         "va del más cercano al más lejano e incluye `distanciaMetros`."
     ),
@@ -164,6 +190,10 @@ async def listar(
     coleccion: Coleccion,
     tipo: Tipo | None = None,
     estado: Estado | None = None,
+    localidad: Annotated[
+        str | None,
+        Query(description="Código ('17') o nombre ('La Candelaria', 'usaquen'). No distingue tildes ni mayúsculas."),
+    ] = None,
     bateriaMin: Annotated[int | None, Query(ge=0, le=100)] = None,
     lat: Annotated[float | None, Query(ge=-90, le=90)] = None,
     lng: Annotated[float | None, Query(ge=-180, le=180)] = None,
@@ -183,6 +213,8 @@ async def listar(
         filtro["estado"] = estado
     if bateriaMin is not None:
         filtro["bateriaPct"] = {"$gte": bateriaMin}
+    if localidad:
+        filtro["$or"] = [{"localidad.codigo": localidad}, {"localidad.slug": slug(localidad)}]
 
     cerca_de = (lat, lng, radioMetros or 500.0) if lat is not None else None
     docs, total = await repo.listar(coleccion, filtro, pagina, tamano, cerca_de)

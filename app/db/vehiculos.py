@@ -6,6 +6,8 @@ from datetime import datetime, timezone
 from pymongo import ReturnDocument
 from pymongo.asynchronous.collection import AsyncCollection
 
+from app.db.localidades import buscar_por_punto, referencia
+
 CAMPOS = ("tipo", "bateriaPct", "estado", "ubicacion", "actualizadoEn")
 
 
@@ -21,6 +23,8 @@ def generar_id() -> str:
 
 def a_salida(doc: dict) -> dict:
     salida = {"id": doc["_id"], **{c: doc[c] for c in CAMPOS}}
+    if doc.get("localidad"):  # sin el slug, que es de uso interno
+        salida["localidad"] = {k: doc["localidad"][k] for k in ("codigo", "nombre")}
     if "distanciaMetros" in doc:
         salida["distanciaMetros"] = round(doc["distanciaMetros"], 1)
     return salida
@@ -114,7 +118,7 @@ async def cambiar_estado(
     El documento actual es None cuando el vehículo no existe.
     """
     nuevo = {"estado": cambio["estado"], "actualizadoEn": ahora()}
-    for campo in ("ubicacion", "bateriaPct"):
+    for campo in ("ubicacion", "bateriaPct", "localidad"):
         if cambio.get(campo) is not None:
             nuevo[campo] = cambio[campo]
 
@@ -126,3 +130,28 @@ async def cambiar_estado(
     if actualizado:
         return actualizado, None
     return None, await coleccion.find_one({"_id": vehiculo_id})
+
+
+async def conteo_por_localidad(coleccion: AsyncCollection) -> dict[str, dict[str, int]]:
+    """{codigo_localidad: {estado: cantidad}} para los vehículos que tienen localidad."""
+    pipeline = [
+        {"$match": {"localidad": {"$exists": True}}},
+        {"$group": {"_id": {"loc": "$localidad.codigo", "estado": "$estado"}, "n": {"$sum": 1}}},
+    ]
+    cursor = await coleccion.aggregate(pipeline)
+    conteo: dict[str, dict[str, int]] = {}
+    async for fila in cursor:
+        conteo.setdefault(fila["_id"]["loc"], {})[fila["_id"]["estado"]] = fila["n"]
+    return conteo
+
+
+async def rellenar_localidades(coleccion: AsyncCollection, localidades: AsyncCollection) -> int:
+    """Asigna localidad a vehículos guardados antes de existir ese campo. Devuelve cuántos actualizó."""
+    actualizados = 0
+    async for doc in coleccion.find({"localidad": {"$exists": False}}):
+        lng, lat = doc["ubicacion"]["coordinates"]
+        loc = await buscar_por_punto(localidades, lng, lat)
+        if loc:
+            await coleccion.update_one({"_id": doc["_id"]}, {"$set": {"localidad": referencia(loc)}})
+            actualizados += 1
+    return actualizados

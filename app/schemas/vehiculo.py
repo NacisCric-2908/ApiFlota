@@ -3,6 +3,8 @@ from typing import Annotated, Literal
 
 from pydantic import BaseModel, Field, field_validator
 
+from app.schemas.localidad import LocalidadRef
+
 Tipo = Literal["scooter", "bicicleta"]
 Estado = Literal["disponible", "en_viaje", "mantenimiento"]
 
@@ -45,6 +47,10 @@ class VehiculoReemplazar(VehiculoBase):
 
 class VehiculoSalida(VehiculoBase):
     id: str
+    localidad: LocalidadRef | None = Field(
+        default=None,
+        description="Localidad de Bogotá donde está el vehículo (la calcula el servicio a partir de la ubicación).",
+    )
     actualizadoEn: datetime
     distanciaMetros: float | None = Field(
         default=None, description="Solo aparece en búsquedas por cercanía."
