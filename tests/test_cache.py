@@ -1,12 +1,5 @@
 from app.externos.cache import CacheTTL
-
-
-class Reloj:
-    def __init__(self):
-        self.t = 1000.0
-
-    def __call__(self):
-        return self.t
+from tests.simulador import Reloj
 
 
 def hacer(**kw):

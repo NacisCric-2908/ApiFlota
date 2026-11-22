@@ -77,3 +77,13 @@ def tras_fallos(fallos: int, estado: int, respuesta: httpx.Response):
         return httpx.Response(estado) if cuenta["n"] <= fallos else respuesta
 
     return _responder
+
+
+class Reloj:
+    """Reloj manual para probar vencimientos de caché sin esperar."""
+
+    def __init__(self):
+        self.t = 1000.0
+
+    def __call__(self):
+        return self.t
