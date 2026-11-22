@@ -1,18 +1,22 @@
 FROM python:3.12-slim AS base
+COPY --from=ghcr.io/astral-sh/uv:0.9.30 /uv /usr/local/bin/uv
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PIP_NO_CACHE_DIR=1 \
-    PIP_DISABLE_PIP_VERSION_CHECK=1
+    UV_LINK_MODE=copy \
+    UV_PYTHON_DOWNLOADS=never \
+    UV_PROJECT_ENVIRONMENT=/opt/venv \
+    PATH="/opt/venv/bin:$PATH"
 WORKDIR /srv
 RUN useradd --create-home --uid 10001 app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
+# Primero solo los archivos de dependencias: la capa se reutiliza mientras no cambien.
+COPY pyproject.toml uv.lock ./
+RUN uv sync --frozen --no-dev --no-install-project
 COPY app ./app
 
 # Imagen de pruebas: docker compose --profile test run --rm test
 FROM base AS test
-COPY requirements-dev.txt pytest.ini ./
-RUN pip install -r requirements-dev.txt
+RUN uv sync --frozen --no-install-project
+COPY pytest.ini ./
 COPY tests ./tests
 USER app
 CMD ["pytest", "-q"]
