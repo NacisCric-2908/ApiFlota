@@ -3,9 +3,8 @@
 import uuid
 from datetime import datetime, timezone
 
-from pymongo.asynchronous.collection import AsyncCollection
-from pymongo.errors import DuplicateKeyError  # noqa: F401  (los routers lo capturan)
 from pymongo import ReturnDocument
+from pymongo.asynchronous.collection import AsyncCollection
 
 CAMPOS = ("tipo", "bateriaPct", "estado", "ubicacion", "actualizadoEn")
 
