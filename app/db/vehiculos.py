@@ -29,3 +29,18 @@ def a_salida(doc: dict) -> dict:
 
 async def obtener(coleccion: AsyncCollection, vehiculo_id: str) -> dict | None:
     return await coleccion.find_one({"_id": vehiculo_id})
+
+
+async def crear(coleccion: AsyncCollection, datos: dict) -> dict:
+    """Inserta un vehículo. Lanza DuplicateKeyError si el id ya existe."""
+    doc = {"_id": datos.get("id") or generar_id(), **{k: v for k, v in datos.items() if k != "id"}}
+    doc["actualizadoEn"] = ahora()
+    await coleccion.insert_one(doc)
+    return doc
+
+
+async def reemplazar(coleccion: AsyncCollection, vehiculo_id: str, datos: dict) -> dict | None:
+    doc = {**datos, "actualizadoEn": ahora()}
+    return await coleccion.find_one_and_replace(
+        {"_id": vehiculo_id}, doc, return_document=ReturnDocument.AFTER
+    )
