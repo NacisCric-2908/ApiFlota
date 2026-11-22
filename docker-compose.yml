@@ -45,6 +45,9 @@ services:
       MONGO_DB: flota_test
       GATEWAY_SECRET: test-secret
       SEED_ON_EMPTY: "false"
+      # Las pruebas nunca llaman a terceros reales; sin esperas para que sean rápidas.
+      EXTERNOS_BACKOFF_S: "0"
+      NOMINATIM_INTERVALO_S: "0"
       LOG_LEVEL: warning
 
 volumes:
