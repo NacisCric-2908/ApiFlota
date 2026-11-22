@@ -114,3 +114,43 @@ async def cambiar_estado(vehiculo_id: str, cambio: CambioEstado, coleccion: Cole
         f"No se puede pasar de '{actual['estado']}' a '{cambio.estado}'.",
         {"estadoActual": actual["estado"], "estadoSolicitado": cambio.estado},
     )
+
+
+@router.get(
+    "",
+    response_model=PaginaVehiculos,
+    summary="Listar vehículos con filtros, cercanía y paginación",
+    description=(
+        "Filtros: `tipo`, `estado`, `bateriaMin`. Cercanía: `lat` y `lng` van juntas; "
+        "`radioMetros` (500 por defecto) solo se acepta con ellas. Con cercanía, el resultado "
+        "va del más cercano al más lejano e incluye `distanciaMetros`."
+    ),
+    responses={**E400},
+)
+async def listar(
+    coleccion: Coleccion,
+    tipo: Tipo | None = None,
+    estado: Estado | None = None,
+    bateriaMin: Annotated[int | None, Query(ge=0, le=100)] = None,
+    lat: Annotated[float | None, Query(ge=-90, le=90)] = None,
+    lng: Annotated[float | None, Query(ge=-180, le=180)] = None,
+    radioMetros: Annotated[float | None, Query(gt=0, le=50_000)] = None,
+    pagina: Annotated[int, Query(ge=1)] = 1,
+    tamano: Annotated[int, Query(ge=1, le=100)] = 20,
+):
+    if (lat is None) != (lng is None):
+        raise ApiError(400, "busqueda_geo_incompleta", "Los parámetros 'lat' y 'lng' van juntos.")
+    if radioMetros is not None and lat is None:
+        raise ApiError(400, "busqueda_geo_incompleta", "'radioMetros' requiere 'lat' y 'lng'.")
+
+    filtro: dict = {}
+    if tipo:
+        filtro["tipo"] = tipo
+    if estado:
+        filtro["estado"] = estado
+    if bateriaMin is not None:
+        filtro["bateriaPct"] = {"$gte": bateriaMin}
+
+    cerca_de = (lat, lng, radioMetros or 500.0) if lat is not None else None
+    docs, total = await repo.listar(coleccion, filtro, pagina, tamano, cerca_de)
+    return {"items": [repo.a_salida(d) for d in docs], "pagina": pagina, "tamano": tamano, "total": total}
