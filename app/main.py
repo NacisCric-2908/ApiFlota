@@ -10,7 +10,7 @@ from app.db import localidades as loc_db
 from app.db.mongo import NOMBRE_COLECCION, crear_cliente, preparar_indices
 from app.db.semilla import cargar_semilla_si_vacia
 from app.db.vehiculos import rellenar_localidades
-from app.routers import health, vehiculos
+from app.routers import health, localidades, vehiculos
 
 
 @asynccontextmanager
@@ -43,3 +43,4 @@ instalar_contrato(app)
 app.add_middleware(GatewaySecretMiddleware)
 app.include_router(health.router)
 app.include_router(vehiculos.router)
+app.include_router(localidades.router)
