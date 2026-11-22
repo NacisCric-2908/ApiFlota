@@ -44,3 +44,42 @@ async def reemplazar(coleccion: AsyncCollection, vehiculo_id: str, datos: dict) 
     return await coleccion.find_one_and_replace(
         {"_id": vehiculo_id}, doc, return_document=ReturnDocument.AFTER
     )
+
+
+async def listar(
+    coleccion: AsyncCollection,
+    filtro: dict,
+    pagina: int,
+    tamano: int,
+    cerca_de: tuple[float, float, float] | None = None,
+) -> tuple[list[dict], int]:
+    """Lista paginada. Con `cerca_de=(lat, lng, radio_m)` ordena por distancia ascendente."""
+    saltar = (pagina - 1) * tamano
+
+    if cerca_de is None:
+        total = await coleccion.count_documents(filtro)
+        cursor = coleccion.find(filtro).sort("_id", 1).skip(saltar).limit(tamano)
+        return await cursor.to_list(length=tamano), total
+
+    lat, lng, radio = cerca_de
+    pipeline = [
+        {
+            "$geoNear": {
+                "near": {"type": "Point", "coordinates": [lng, lat]},
+                "distanceField": "distanciaMetros",
+                "maxDistance": radio,
+                "spherical": True,
+                "query": filtro,
+            }
+        },
+        {
+            "$facet": {
+                "items": [{"$skip": saltar}, {"$limit": tamano}],
+                "total": [{"$count": "n"}],
+            }
+        },
+    ]
+    cursor = await coleccion.aggregate(pipeline)
+    resultado = (await cursor.to_list(length=1))[0]
+    total = resultado["total"][0]["n"] if resultado["total"] else 0
+    return resultado["items"], total
