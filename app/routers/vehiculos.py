@@ -42,3 +42,19 @@ async def detalle(vehiculo_id: str, coleccion: Coleccion):
     if doc is None:
         raise _no_encontrado(vehiculo_id)
     return repo.a_salida(doc)
+
+
+@router.post(
+    "",
+    response_model=VehiculoSalida,
+    status_code=201,
+    summary="Crear un vehículo",
+    responses={**E400, 409: {"model": ErrorRespuesta, "description": "El id ya existe"}},
+)
+async def crear(datos: VehiculoCrear, respuesta: Response, coleccion: Coleccion):
+    try:
+        doc = await repo.crear(coleccion, datos.model_dump())
+    except DuplicateKeyError:
+        raise ApiError(409, "vehiculo_duplicado", f"Ya existe el vehículo '{datos.id}'.") from None
+    respuesta.headers["Location"] = f"/vehiculos/{doc['_id']}"
+    return repo.a_salida(doc)
