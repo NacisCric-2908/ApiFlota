@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" pages="5">
+<mxfile host="app.diagrams.net" pages="6">
   <diagram name="Diagrama de nube" id="0y57Azi9G5EGzTOEQfPM">
     <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1000" pageHeight="700" math="0" shadow="0">
       <root>
@@ -1031,6 +1031,224 @@
         </mxCell>
         <mxCell id="fj-nota2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fontSize=11;fillColor=#f8cecc;strokeColor=#b85450;arcSize=4;" value="&lt;b&gt;Propuesto: validar el punto final&lt;/b&gt;&lt;br&gt;«Validar que el punto esté en Bogotá» (fase 3) no está en el enunciado. Flota rechaza con 400 una ubicación fuera de Bogotá al liberar el vehículo; si Viajes y zonas ya guardó el viaje como finalizado, quedaría inconsistente. Por eso se propone validar antes de guardar. Acordar con Viajes y zonas." vertex="1">
           <mxGeometry height="175" width="330" x="1680" y="260" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="fl-pg-hexagonal" name="Hexagonal - Flota">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="2200" pageHeight="1500" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="fh-mid" parent="1" style="swimlane;whiteSpace=wrap;html=1;" value="API Middleware: Flota inteligente" vertex="1">
+          <mxGeometry height="1290" width="1380" x="0" y="0" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-h1" parent="fh-mid" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;shapeInside=1;aspect=fixed;rotation=90;fillColor=#f8cecc;strokeColor=#b85450;" value="" vertex="1">
+          <mxGeometry height="980" width="1132" x="124" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-h2" parent="fh-mid" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;shapeInside=1;aspect=fixed;rotation=90;fillColor=#ffe6cc;strokeColor=#d79b00;" value="" vertex="1">
+          <mxGeometry height="680" width="785" x="298" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-h3" parent="fh-mid" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;shapeInside=1;aspect=fixed;rotation=90;fillColor=#fff2cc;strokeColor=#d6b656;" value="" vertex="1">
+          <mxGeometry height="380" width="439" x="471" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-entrada" parent="fh-mid" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=13;" value="Entrada (quien nos llama)" vertex="1">
+          <mxGeometry height="24" width="160" x="40" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-salida" parent="fh-mid" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=13;" value="Salida (a quién llamamos)" vertex="1">
+          <mxGeometry height="24" width="160" x="1180" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-t_ad" parent="fh-mid" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=12;fontStyle=1;" value="Adaptadores" vertex="1">
+          <mxGeometry height="24" width="200" x="590" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-t_pu" parent="fh-mid" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=12;fontStyle=1;" value="Puertos" vertex="1">
+          <mxGeometry height="24" width="200" x="590" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-t_nu" parent="fh-mid" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=11;fontStyle=1;" value="Núcleo: reglas de negocio" vertex="1">
+          <mxGeometry height="24" width="200" x="590" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-a3" parent="fh-mid" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fontSize=10;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="«adapter»&lt;br&gt;Seguridad: cabecera X-Gateway-Secret&lt;br&gt;y error común" vertex="1">
+          <mxGeometry height="52" width="128" x="212" y="454" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-a1" parent="fh-mid" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fontSize=10;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="«adapter»&lt;br&gt;REST GET /recomendaciones/vehiculo&lt;br&gt;(FastAPI)" vertex="1">
+          <mxGeometry height="52" width="128" x="212" y="534" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-a2" parent="fh-mid" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fontSize=10;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="«adapter»&lt;br&gt;REST GET /flota/alertas&lt;br&gt;(FastAPI)" vertex="1">
+          <mxGeometry height="52" width="128" x="212" y="654" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-p1" parent="fh-mid" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fontSize=10;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="«port»&lt;br&gt;recomendarVehiculo&lt;br&gt;(lat, lng, tipo)" vertex="1">
+          <mxGeometry height="52" width="128" x="362" y="534" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-p2" parent="fh-mid" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fontSize=10;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="«port»&lt;br&gt;obtenerAlertas()" vertex="1">
+          <mxGeometry height="52" width="128" x="362" y="654" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-u1" parent="fh-mid" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fontSize=10;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="«Caso de uso» RecomendarVehiculo&lt;br&gt;radio 500 m · batería ≥ 25 % · sin zona prohibida · 3 mejores" vertex="1">
+          <mxGeometry height="50" width="340" x="520" y="535" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-d1" parent="fh-mid" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fontSize=10;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="«Regla de dominio» Puntaje&lt;br&gt;distancia − batería × 2 (menor es mejor)" vertex="1">
+          <mxGeometry height="50" width="340" x="520" y="595" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-u2" parent="fh-mid" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fontSize=10;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="«Caso de uso» GenerarAlertas&lt;br&gt;batería &lt; 15 % · zona prohibida · sin actualizar hace más de 2 h" vertex="1">
+          <mxGeometry height="50" width="340" x="520" y="655" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-d2" parent="fh-mid" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fontSize=10;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="«Regla de dominio» Prioridad de alerta&lt;br&gt;alta si batería &lt; 10 % o está en zona prohibida" vertex="1">
+          <mxGeometry height="50" width="340" x="520" y="715" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-q1" parent="fh-mid" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fontSize=10;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="«port»&lt;br&gt;VehiculosPort&lt;br&gt;buscarCercanos · listar" vertex="1">
+          <mxGeometry height="52" width="128" x="892" y="459" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-q2" parent="fh-mid" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fontSize=10;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="«port»&lt;br&gt;ZonasPort&lt;br&gt;verificarPunto(lat, lng)" vertex="1">
+          <mxGeometry height="52" width="128" x="892" y="549" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-q3" parent="fh-mid" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fontSize=10;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="«port»&lt;br&gt;ClimaPort (opcional)&lt;br&gt;¿está lloviendo?" vertex="1">
+          <mxGeometry height="52" width="128" x="892" y="639" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-q4" parent="fh-mid" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fontSize=10;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="«port»&lt;br&gt;RelojPort&lt;br&gt;ahora()" vertex="1">
+          <mxGeometry height="52" width="128" x="892" y="729" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-r1" parent="fh-mid" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fontSize=10;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="«adapter»&lt;br&gt;Cliente HTTP → CRUD Flota&lt;br&gt;(S2S, X-Gateway-Secret)" vertex="1">
+          <mxGeometry height="52" width="128" x="1042" y="459" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-r2" parent="fh-mid" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fontSize=10;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="«adapter»&lt;br&gt;Cliente HTTP → Gateway → Viajes&lt;br&gt;token, timeout; 503 si cae" vertex="1">
+          <mxGeometry height="52" width="128" x="1042" y="549" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-r3" parent="fh-mid" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fontSize=10;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="«adapter»&lt;br&gt;Cliente HTTP → CRUD Flota&lt;br&gt;/vehiculos/{id}/clima" vertex="1">
+          <mxGeometry height="52" width="128" x="1042" y="639" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-r4" parent="fh-mid" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;fontSize=10;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="«adapter»&lt;br&gt;Reloj del sistema (UTC)&lt;br&gt;en pruebas: reloj simulado" vertex="1">
+          <mxGeometry height="52" width="128" x="1042" y="729" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-gw" parent="fh-mid" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;fillColor=#f5f5f5;strokeColor=#666666;" value="&lt;b&gt;API Gateway&lt;/b&gt;&lt;br&gt;token y alcances&lt;br&gt;(entra todo por aquí)" vertex="1">
+          <mxGeometry height="78" width="150" x="24" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-xcrud" parent="fh-mid" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;fillColor=#f5f5f5;strokeColor=#666666;" value="&lt;b&gt;CRUD Flota&lt;/b&gt;&lt;br&gt;vehículos · localidades&lt;br&gt;· clima" vertex="1">
+          <mxGeometry height="78" width="150" x="1215" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-xvz" parent="fh-mid" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;fillColor=#f5f5f5;strokeColor=#666666;" value="&lt;b&gt;Viajes y zonas&lt;/b&gt;&lt;br&gt;GET /zonas/verificar&lt;br&gt;(vía Gateway)" vertex="1">
+          <mxGeometry height="78" width="150" x="1215" y="595" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-e029" edge="1" parent="fh-mid" source="fh-gw" target="fh-a1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;strokeColor=#444444;endArrow=classic;endFill=1;labelBackgroundColor=default;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-e030" edge="1" parent="fh-mid" source="fh-gw" target="fh-a2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;strokeColor=#444444;endArrow=classic;endFill=1;labelBackgroundColor=default;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-e031" edge="1" parent="fh-mid" source="fh-a3" target="fh-a1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;strokeColor=#444444;endArrow=classic;endFill=1;labelBackgroundColor=default;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;" value="valida">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-e032" edge="1" parent="fh-mid" source="fh-a1" target="fh-p1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;strokeColor=#444444;endArrow=classic;endFill=1;labelBackgroundColor=default;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-e033" edge="1" parent="fh-mid" source="fh-p1" target="fh-u1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;strokeColor=#444444;endArrow=classic;endFill=1;labelBackgroundColor=default;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-e034" edge="1" parent="fh-mid" source="fh-a2" target="fh-p2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;strokeColor=#444444;endArrow=classic;endFill=1;labelBackgroundColor=default;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-e035" edge="1" parent="fh-mid" source="fh-p2" target="fh-u2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;strokeColor=#444444;endArrow=classic;endFill=1;labelBackgroundColor=default;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-e036" edge="1" parent="fh-mid" source="fh-u1" target="fh-q1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;strokeColor=#444444;endArrow=classic;endFill=1;labelBackgroundColor=default;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-e037" edge="1" parent="fh-mid" source="fh-u1" target="fh-q2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;strokeColor=#444444;endArrow=classic;endFill=1;labelBackgroundColor=default;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-e038" edge="1" parent="fh-mid" source="fh-u1" target="fh-q3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;strokeColor=#444444;endArrow=classic;endFill=1;labelBackgroundColor=default;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-e039" edge="1" parent="fh-mid" source="fh-u2" target="fh-q1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;strokeColor=#444444;endArrow=classic;endFill=1;labelBackgroundColor=default;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-e040" edge="1" parent="fh-mid" source="fh-u2" target="fh-q2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;strokeColor=#444444;endArrow=classic;endFill=1;labelBackgroundColor=default;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-e041" edge="1" parent="fh-mid" source="fh-u2" target="fh-q4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;strokeColor=#444444;endArrow=classic;endFill=1;labelBackgroundColor=default;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-e042" edge="1" parent="fh-mid" source="fh-u1" target="fh-d1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;strokeColor=#444444;endArrow=classic;endFill=1;labelBackgroundColor=default;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;dashPattern=1 3;" value="usa">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-e043" edge="1" parent="fh-mid" source="fh-u2" target="fh-d2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;strokeColor=#444444;endArrow=classic;endFill=1;labelBackgroundColor=default;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;dashPattern=1 3;" value="usa">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-e044" edge="1" parent="fh-mid" source="fh-q1" target="fh-r1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;strokeColor=#444444;endArrow=classic;endFill=1;labelBackgroundColor=default;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-e045" edge="1" parent="fh-mid" source="fh-q2" target="fh-r2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;strokeColor=#444444;endArrow=classic;endFill=1;labelBackgroundColor=default;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-e046" edge="1" parent="fh-mid" source="fh-q3" target="fh-r3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;strokeColor=#444444;endArrow=classic;endFill=1;labelBackgroundColor=default;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-e047" edge="1" parent="fh-mid" source="fh-q4" target="fh-r4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;strokeColor=#444444;endArrow=classic;endFill=1;labelBackgroundColor=default;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-e048" edge="1" parent="fh-mid" source="fh-r1" target="fh-xcrud" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;strokeColor=#444444;endArrow=classic;endFill=1;labelBackgroundColor=default;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-e049" edge="1" parent="fh-mid" source="fh-r3" target="fh-xcrud" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;strokeColor=#444444;endArrow=classic;endFill=1;labelBackgroundColor=default;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-e050" edge="1" parent="fh-mid" source="fh-r2" target="fh-xvz" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;fontSize=10;strokeColor=#444444;endArrow=classic;endFill=1;labelBackgroundColor=default;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-nota" parent="fh-mid" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#FFF9B2;strokeColor=none;fillStyle=solid;fontSize=11;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;gradientColor=#FFF2A1;shadow=1;size=20;" value="&lt;b&gt;Por qué hexagonal en el MID&lt;/b&gt;&lt;br&gt;Las reglas (radio, batería, puntaje, zonas, alertas) viven en el núcleo y no saben nada de HTTP, de MongoDB ni de otros servicios. Los puertos son interfaces; los adaptadores se enchufan. En las pruebas unitarias se cambian por simulados (zonas caídas → 503, vehículos con 20 % de batería, reloj a +3 h), que es lo que pide el enunciado." vertex="1">
+          <mxGeometry height="150" width="250" x="24" y="980" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-crud-titulo" parent="1" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;" value="&lt;b style=&#x27;font-size:16px&#x27;&gt;API CRUD Flota: arquitectura en capas&lt;/b&gt;&lt;br&gt;Controller → Repository → Base de datos. Es un CRUD: no necesita más." vertex="1">
+          <mxGeometry height="50" width="640" x="1430" y="24" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-k1" parent="1" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;" value="Vehículos" vertex="1">
+          <mxGeometry height="244" width="310" x="1430" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-k1-c0" parent="fh-k1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" value="&lt;b&gt;Controller&lt;/b&gt;&lt;br&gt;&lt;span style=&#x27;font-size:10px&#x27;&gt;routers/vehiculos.py&lt;br&gt;GET · POST · PUT · PATCH estado · DELETE&lt;/span&gt;" vertex="1">
+          <mxGeometry height="58" width="282" x="14" y="38" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-k1-c1" parent="fh-k1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" value="&lt;b&gt;Repository&lt;/b&gt;&lt;br&gt;&lt;span style=&#x27;font-size:10px&#x27;&gt;db/vehiculos.py&lt;br&gt;$geoNear · reserva atómica · transiciones&lt;/span&gt;" vertex="1">
+          <mxGeometry height="58" width="282" x="14" y="104" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-k1-c2" parent="fh-k1" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" value="&lt;b&gt;Database&lt;/b&gt;&lt;br&gt;&lt;span style=&#x27;font-size:10px&#x27;&gt;MongoDB · colección vehiculos&lt;br&gt;índice 2dsphere en ubicacion&lt;/span&gt;" vertex="1">
+          <mxGeometry height="58" width="282" x="14" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-k2" parent="1" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;" value="Localidades de Bogotá" vertex="1">
+          <mxGeometry height="244" width="310" x="1770" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-k2-c0" parent="fh-k2" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" value="&lt;b&gt;Controller&lt;/b&gt;&lt;br&gt;&lt;span style=&#x27;font-size:10px&#x27;&gt;routers/localidades.py&lt;br&gt;listar · verificar · detalle (GeoJSON)&lt;/span&gt;" vertex="1">
+          <mxGeometry height="58" width="282" x="14" y="38" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-k2-c1" parent="fh-k2" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" value="&lt;b&gt;Repository&lt;/b&gt;&lt;br&gt;&lt;span style=&#x27;font-size:10px&#x27;&gt;db/localidades.py&lt;br&gt;$geoIntersects · carga idempotente&lt;/span&gt;" vertex="1">
+          <mxGeometry height="58" width="282" x="14" y="104" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-k2-c2" parent="fh-k2" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" value="&lt;b&gt;Database&lt;/b&gt;&lt;br&gt;&lt;span style=&#x27;font-size:10px&#x27;&gt;MongoDB · colección localidades&lt;br&gt;índice 2dsphere en geometria&lt;/span&gt;" vertex="1">
+          <mxGeometry height="58" width="282" x="14" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-k3" parent="1" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=#f8cecc;strokeColor=#b85450;" value="Entorno (APIs de terceros)" vertex="1">
+          <mxGeometry height="244" width="310" x="1430" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-k3-c0" parent="fh-k3" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" value="&lt;b&gt;Controller&lt;/b&gt;&lt;br&gt;&lt;span style=&#x27;font-size:10px&#x27;&gt;routers/entorno.py&lt;br&gt;GET clima · GET dirección&lt;/span&gt;" vertex="1">
+          <mxGeometry height="58" width="282" x="14" y="38" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-k3-c1" parent="fh-k3" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" value="&lt;b&gt;Cliente&lt;/b&gt;&lt;br&gt;&lt;span style=&#x27;font-size:10px&#x27;&gt;externos/&lt;br&gt;timeout 3 s · 2 reintentos · caché · 1 petición/s&lt;/span&gt;" vertex="1">
+          <mxGeometry height="58" width="282" x="14" y="104" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-k3-c2" parent="fh-k3" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" value="&lt;b&gt;API externa&lt;/b&gt;&lt;br&gt;&lt;span style=&#x27;font-size:10px&#x27;&gt;Open-Meteo · Nominatim (OSM)&lt;/span&gt;" vertex="1">
+          <mxGeometry height="58" width="282" x="14" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-k4" parent="1" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=#f5f5f5;strokeColor=#666666;" value="Transversal" vertex="1">
+          <mxGeometry height="244" width="310" x="1770" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-k4-c0" parent="fh-k4" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" value="&lt;b&gt;core/&lt;/b&gt;&lt;br&gt;&lt;span style=&#x27;font-size:10px&#x27;&gt;configuración (variables de entorno)&lt;br&gt;errores con formato común · seguridad X-Gateway-Secret&lt;/span&gt;" vertex="1">
+          <mxGeometry height="58" width="282" x="14" y="38" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-k4-c1" parent="fh-k4" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" value="&lt;b&gt;schemas/&lt;/b&gt;&lt;br&gt;&lt;span style=&#x27;font-size:10px&#x27;&gt;validación con Pydantic: datos inválidos → 400&lt;/span&gt;" vertex="1">
+          <mxGeometry height="58" width="282" x="14" y="104" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-k4-c2" parent="fh-k4" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" value="&lt;b&gt;main.py&lt;/b&gt;&lt;br&gt;&lt;span style=&#x27;font-size:10px&#x27;&gt;ensambla la app y, al arrancar, prepara índices y semilla&lt;/span&gt;" vertex="1">
+          <mxGeometry height="58" width="282" x="14" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="fh-decision" parent="1" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fontSize=11;fillColor=#fff2cc;strokeColor=#d6b656;arcSize=3;" value="&lt;b&gt;Decisión de arquitectura&lt;/b&gt;&lt;br&gt;• &lt;b&gt;Sistema:&lt;/b&gt; microservicios detrás de un API Gateway; cada servicio con su propia base de datos (Flota usa MongoDB; Cuentas y Viajes, PostgreSQL).&lt;br&gt;• &lt;b&gt;MID Flota:&lt;/b&gt; hexagonal, porque concentra reglas de negocio que dependen de otros servicios y hay que probarlas aisladas.&lt;br&gt;• &lt;b&gt;CRUD Flota:&lt;/b&gt; en capas, tal como está construido en este repositorio (la regla de transiciones de estado vive en el repositorio, junto a la operación atómica). Si el equipo prefiere hexagonal estricto también aquí, es un refactor acotado.&lt;br&gt;• El MID Flota aún no está implementado: esta página es su diseño." vertex="1">
+          <mxGeometry height="175" width="650" x="1430" y="700" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
