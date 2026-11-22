@@ -1,0 +1,7 @@
+# Se aplica automáticamente con `docker compose up` (desarrollo): recarga en caliente.
+# Para un entorno tipo producción: docker compose -f docker-compose.yml up -d
+services:
+  api:
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    volumes:
+      - ./app:/srv/app:ro

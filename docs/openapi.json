@@ -1,0 +1,1675 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "API Flota - CRUD de Vehiculos",
+    "description": "Inventario de scooters y bicicletas del clúster Rodar (MongoDB, consultas geoespaciales).",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "Salud"
+        ],
+        "summary": "Estado del servicio",
+        "operationId": "verificarSalud",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Verificarsalud"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vehiculos/{vehiculo_id}": {
+      "get": {
+        "tags": [
+          "Vehiculos"
+        ],
+        "summary": "Detalle de un vehículo",
+        "operationId": "obtenerVehiculo",
+        "security": [
+          {
+            "GatewaySecret": []
+          },
+          {
+            "OAuth2Gateway": [
+              "vehiculos:leer"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "vehiculo_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Vehiculo Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VehiculoSalida"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Falta la cabecera secreta del gateway",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Vehículo no encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Vehiculos"
+        ],
+        "summary": "Reemplazar un vehículo",
+        "operationId": "reemplazarVehiculo",
+        "security": [
+          {
+            "GatewaySecret": []
+          },
+          {
+            "OAuth2Gateway": [
+              "vehiculos:escribir"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "vehiculo_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Vehiculo Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VehiculoReemplazar"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VehiculoSalida"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Falta la cabecera secreta del gateway",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos o parámetros inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Vehículo no encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Vehiculos"
+        ],
+        "summary": "Eliminar un vehículo (no permitido si está en viaje)",
+        "operationId": "eliminarVehiculo",
+        "security": [
+          {
+            "GatewaySecret": []
+          },
+          {
+            "OAuth2Gateway": [
+              "vehiculos:escribir"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "vehiculo_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Vehiculo Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "401": {
+            "description": "Falta la cabecera secreta del gateway",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Vehículo no encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "El vehículo está en viaje",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vehiculos": {
+      "post": {
+        "tags": [
+          "Vehiculos"
+        ],
+        "summary": "Crear un vehículo",
+        "operationId": "crearVehiculo",
+        "security": [
+          {
+            "GatewaySecret": []
+          },
+          {
+            "OAuth2Gateway": [
+              "vehiculos:escribir"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VehiculoCrear"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VehiculoSalida"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Falta la cabecera secreta del gateway",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos o parámetros inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "El id ya existe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Vehiculos"
+        ],
+        "summary": "Listar vehículos con filtros, cercanía y paginación",
+        "description": "Filtros: `tipo`, `estado`, `localidad`, `bateriaMin`. Cercanía: `lat` y `lng` van juntas; `radioMetros` (500 por defecto) solo se acepta con ellas. Con cercanía, el resultado va del más cercano al más lejano e incluye `distanciaMetros`.",
+        "operationId": "listarVehiculos",
+        "security": [
+          {
+            "GatewaySecret": []
+          },
+          {
+            "OAuth2Gateway": [
+              "vehiculos:leer"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "tipo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "scooter",
+                    "bicicleta"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Tipo"
+            }
+          },
+          {
+            "name": "estado",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "disponible",
+                    "en_viaje",
+                    "mantenimiento"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Estado"
+            }
+          },
+          {
+            "name": "localidad",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Código ('17') o nombre ('La Candelaria', 'usaquen'). No distingue tildes ni mayúsculas.",
+              "title": "Localidad"
+            },
+            "description": "Código ('17') o nombre ('La Candelaria', 'usaquen'). No distingue tildes ni mayúsculas."
+          },
+          {
+            "name": "bateriaMin",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 100,
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Bateriamin"
+            }
+          },
+          {
+            "name": "lat",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "maximum": 90,
+                  "minimum": -90
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Lat"
+            }
+          },
+          {
+            "name": "lng",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "maximum": 180,
+                  "minimum": -180
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Lng"
+            }
+          },
+          {
+            "name": "radioMetros",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "maximum": 50000,
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Radiometros"
+            }
+          },
+          {
+            "name": "pagina",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Pagina"
+            }
+          },
+          {
+            "name": "tamano",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Tamano"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginaVehiculos"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Falta la cabecera secreta del gateway",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos o parámetros inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vehiculos/{vehiculo_id}/estado": {
+      "patch": {
+        "tags": [
+          "Vehiculos"
+        ],
+        "summary": "Cambiar el estado (y opcionalmente ubicación y batería) de forma atómica",
+        "description": "Transiciones válidas: `disponible`→`en_viaje`|`mantenimiento`, `en_viaje`→`disponible`|`mantenimiento`, `mantenimiento`→`disponible`. Repetir el estado actual responde 409. Si dos peticiones compiten por el mismo vehículo, solo una gana.",
+        "operationId": "cambiarEstadoVehiculo",
+        "security": [
+          {
+            "GatewaySecret": []
+          },
+          {
+            "OAuth2Gateway": [
+              "vehiculos:escribir"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "vehiculo_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Vehiculo Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CambioEstado"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VehiculoSalida"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Falta la cabecera secreta del gateway",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos o parámetros inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Vehículo no encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicto de estado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/localidades": {
+      "get": {
+        "tags": [
+          "Localidades"
+        ],
+        "summary": "Las 20 localidades de Bogotá con el conteo de vehículos de cada una",
+        "operationId": "listarLocalidades",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/LocalidadResumen"
+                  },
+                  "type": "array",
+                  "title": "Response Listarlocalidades"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Falta la cabecera secreta del gateway",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "GatewaySecret": []
+          },
+          {
+            "OAuth2Gateway": [
+              "vehiculos:leer"
+            ]
+          }
+        ]
+      }
+    },
+    "/localidades/verificar": {
+      "get": {
+        "tags": [
+          "Localidades"
+        ],
+        "summary": "¿En qué localidad de Bogotá está un punto?",
+        "description": "Siempre responde 200: fuera de Bogotá devuelve `dentroDeBogota: false` y `localidad: null`.",
+        "operationId": "verificarLocalidad",
+        "security": [
+          {
+            "GatewaySecret": []
+          },
+          {
+            "OAuth2Gateway": [
+              "vehiculos:leer"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 90,
+              "minimum": -90,
+              "title": "Lat"
+            }
+          },
+          {
+            "name": "lng",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 180,
+              "minimum": -180,
+              "title": "Lng"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificacionLocalidad"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Falta la cabecera secreta del gateway",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Coordenadas inválidas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/localidades/{codigo}": {
+      "get": {
+        "tags": [
+          "Localidades"
+        ],
+        "summary": "Una localidad con su geometría (Feature GeoJSON)",
+        "operationId": "obtenerLocalidad",
+        "security": [
+          {
+            "GatewaySecret": []
+          },
+          {
+            "OAuth2Gateway": [
+              "vehiculos:leer"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "codigo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Codigo"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocalidadGeo"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Falta la cabecera secreta del gateway",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Localidad no encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vehiculos/{vehiculo_id}/clima": {
+      "get": {
+        "tags": [
+          "Entorno"
+        ],
+        "summary": "Clima actual en la ubicación del vehículo (Open-Meteo)",
+        "description": "Consulta Open-Meteo con tiempo máximo de 3 s y hasta 2 reintentos; guarda el resultado 10 min. **Plan de degradación:** si Open-Meteo no responde se devuelve el último dato guardado (hasta 3 h) con `origen: cache_desactualizada`; si no hay ninguno, 503 `servicio_externo_no_disponible`.",
+        "operationId": "obtenerClimaVehiculo",
+        "security": [
+          {
+            "GatewaySecret": []
+          },
+          {
+            "OAuth2Gateway": [
+              "vehiculos:leer"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "vehiculo_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Vehiculo Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClimaSalida"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Falta la cabecera secreta del gateway",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Vehículo no encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Open-Meteo no responde y no hay dato guardado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vehiculos/{vehiculo_id}/direccion": {
+      "get": {
+        "tags": [
+          "Entorno"
+        ],
+        "summary": "Dirección de la ubicación del vehículo (Nominatim / OpenStreetMap)",
+        "description": "Geocodificación inversa con tiempo máximo de 3 s, hasta 2 reintentos y no más de 1 petición por segundo (política de Nominatim); guarda el resultado 24 h. **Plan de degradación:** si Nominatim falla se devuelve el último dato guardado (hasta 7 días, `origen: cache_desactualizada`) y, si no hay, la localidad del vehículo calculada con datos propios (`origen: local`, solo `direccion` y `fuente`). Solo da 503 si el vehículo tampoco tiene localidad.",
+        "operationId": "obtenerDireccionVehiculo",
+        "security": [
+          {
+            "GatewaySecret": []
+          },
+          {
+            "OAuth2Gateway": [
+              "vehiculos:leer"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "vehiculo_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Vehiculo Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DireccionSalida"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Falta la cabecera secreta del gateway",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Vehículo no encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Nominatim no responde y no hay plan alterno",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorRespuesta"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CambioEstado": {
+        "properties": {
+          "estado": {
+            "type": "string",
+            "enum": [
+              "disponible",
+              "en_viaje",
+              "mantenimiento"
+            ],
+            "title": "Estado"
+          },
+          "ubicacion": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Punto"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "bateriaPct": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 100.0,
+                "minimum": 0.0,
+                "description": "Porcentaje de batería (0 a 100)."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bateriapct"
+          }
+        },
+        "type": "object",
+        "required": [
+          "estado"
+        ],
+        "title": "CambioEstado"
+      },
+      "ClimaSalida": {
+        "properties": {
+          "temperaturaC": {
+            "type": "number",
+            "title": "Temperaturac"
+          },
+          "humedadPct": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Humedadpct"
+          },
+          "precipitacionMm": {
+            "type": "number",
+            "title": "Precipitacionmm"
+          },
+          "lluvia": {
+            "type": "boolean",
+            "title": "Lluvia",
+            "description": "True si está lloviendo ahora (precipitación > 0 o código WMO de lluvia)."
+          },
+          "vientoKmh": {
+            "type": "number",
+            "title": "Vientokmh"
+          },
+          "codigoClima": {
+            "type": "integer",
+            "title": "Codigoclima",
+            "description": "Código WMO del estado del tiempo."
+          },
+          "descripcion": {
+            "type": "string",
+            "title": "Descripcion"
+          },
+          "observadoEn": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Observadoen"
+          },
+          "fuente": {
+            "type": "string",
+            "title": "Fuente",
+            "default": "Open-Meteo"
+          },
+          "origen": {
+            "type": "string",
+            "enum": [
+              "externo",
+              "cache",
+              "cache_desactualizada",
+              "local"
+            ],
+            "title": "Origen",
+            "description": "De dónde salió el dato: `externo` (consulta en vivo), `cache`, `cache_desactualizada` (el tercero falló y se sirvió el último dato guardado) o `local` (plan alterno con datos propios)."
+          }
+        },
+        "type": "object",
+        "required": [
+          "temperaturaC",
+          "precipitacionMm",
+          "lluvia",
+          "vientoKmh",
+          "codigoClima",
+          "descripcion",
+          "observadoEn",
+          "origen"
+        ],
+        "title": "ClimaSalida"
+      },
+      "ConteoVehiculos": {
+        "properties": {
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "disponible": {
+            "type": "integer",
+            "title": "Disponible"
+          },
+          "en_viaje": {
+            "type": "integer",
+            "title": "En Viaje"
+          },
+          "mantenimiento": {
+            "type": "integer",
+            "title": "Mantenimiento"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total",
+          "disponible",
+          "en_viaje",
+          "mantenimiento"
+        ],
+        "title": "ConteoVehiculos"
+      },
+      "DireccionSalida": {
+        "properties": {
+          "direccion": {
+            "type": "string",
+            "title": "Direccion"
+          },
+          "calle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Calle"
+          },
+          "barrio": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Barrio"
+          },
+          "codigoPostal": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Codigopostal"
+          },
+          "fuente": {
+            "type": "string",
+            "title": "Fuente"
+          },
+          "origen": {
+            "type": "string",
+            "enum": [
+              "externo",
+              "cache",
+              "cache_desactualizada",
+              "local"
+            ],
+            "title": "Origen",
+            "description": "De dónde salió el dato: `externo` (consulta en vivo), `cache`, `cache_desactualizada` (el tercero falló y se sirvió el último dato guardado) o `local` (plan alterno con datos propios)."
+          }
+        },
+        "type": "object",
+        "required": [
+          "direccion",
+          "fuente",
+          "origen"
+        ],
+        "title": "DireccionSalida"
+      },
+      "ErrorRespuesta": {
+        "properties": {
+          "codigo": {
+            "type": "string",
+            "title": "Codigo"
+          },
+          "mensaje": {
+            "type": "string",
+            "title": "Mensaje"
+          },
+          "detalle": {
+            "title": "Detalle",
+            "default": {}
+          }
+        },
+        "type": "object",
+        "required": [
+          "codigo",
+          "mensaje"
+        ],
+        "title": "ErrorRespuesta",
+        "description": "Formato de error común a todos los servicios del clúster."
+      },
+      "LocalidadGeo": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "Feature",
+            "title": "Type",
+            "default": "Feature"
+          },
+          "properties": {
+            "$ref": "#/components/schemas/PropiedadesLocalidad"
+          },
+          "geometry": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Geometry"
+          }
+        },
+        "type": "object",
+        "required": [
+          "properties",
+          "geometry"
+        ],
+        "title": "LocalidadGeo",
+        "description": "Localidad como Feature GeoJSON (geometría MultiPolygon, coordenadas [longitud, latitud])."
+      },
+      "LocalidadRef": {
+        "properties": {
+          "codigo": {
+            "type": "string",
+            "title": "Codigo",
+            "description": "Código oficial de la localidad ('01' a '20').",
+            "examples": [
+              "17"
+            ]
+          },
+          "nombre": {
+            "type": "string",
+            "title": "Nombre",
+            "examples": [
+              "La Candelaria"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "codigo",
+          "nombre"
+        ],
+        "title": "LocalidadRef"
+      },
+      "LocalidadResumen": {
+        "properties": {
+          "codigo": {
+            "type": "string",
+            "title": "Codigo",
+            "description": "Código oficial de la localidad ('01' a '20').",
+            "examples": [
+              "17"
+            ]
+          },
+          "nombre": {
+            "type": "string",
+            "title": "Nombre",
+            "examples": [
+              "La Candelaria"
+            ]
+          },
+          "areaM2": {
+            "type": "integer",
+            "title": "Aream2"
+          },
+          "vehiculos": {
+            "$ref": "#/components/schemas/ConteoVehiculos"
+          }
+        },
+        "type": "object",
+        "required": [
+          "codigo",
+          "nombre",
+          "areaM2",
+          "vehiculos"
+        ],
+        "title": "LocalidadResumen"
+      },
+      "PaginaVehiculos": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/VehiculoSalida"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "pagina": {
+            "type": "integer",
+            "title": "Pagina"
+          },
+          "tamano": {
+            "type": "integer",
+            "title": "Tamano"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "pagina",
+          "tamano",
+          "total"
+        ],
+        "title": "PaginaVehiculos"
+      },
+      "PropiedadesLocalidad": {
+        "properties": {
+          "codigo": {
+            "type": "string",
+            "title": "Codigo",
+            "description": "Código oficial de la localidad ('01' a '20').",
+            "examples": [
+              "17"
+            ]
+          },
+          "nombre": {
+            "type": "string",
+            "title": "Nombre",
+            "examples": [
+              "La Candelaria"
+            ]
+          },
+          "areaM2": {
+            "type": "integer",
+            "title": "Aream2"
+          }
+        },
+        "type": "object",
+        "required": [
+          "codigo",
+          "nombre",
+          "areaM2"
+        ],
+        "title": "PropiedadesLocalidad"
+      },
+      "Punto": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "const": "Point",
+            "title": "Type",
+            "default": "Point"
+          },
+          "coordinates": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Coordinates"
+          }
+        },
+        "type": "object",
+        "required": [
+          "coordinates"
+        ],
+        "title": "Punto",
+        "description": "Punto GeoJSON. Ojo: el orden de las coordenadas es [longitud, latitud]."
+      },
+      "VehiculoCrear": {
+        "properties": {
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "scooter",
+              "bicicleta"
+            ],
+            "title": "Tipo"
+          },
+          "bateriaPct": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Bateriapct",
+            "description": "Porcentaje de batería (0 a 100)."
+          },
+          "estado": {
+            "type": "string",
+            "enum": [
+              "disponible",
+              "en_viaje",
+              "mantenimiento"
+            ],
+            "title": "Estado"
+          },
+          "ubicacion": {
+            "$ref": "#/components/schemas/Punto"
+          },
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{1,40}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id",
+            "description": "Opcional. Si se omite, el servicio genera uno (veh-XXXXXXXX)."
+          }
+        },
+        "type": "object",
+        "required": [
+          "tipo",
+          "bateriaPct",
+          "estado",
+          "ubicacion"
+        ],
+        "title": "VehiculoCrear"
+      },
+      "VehiculoReemplazar": {
+        "properties": {
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "scooter",
+              "bicicleta"
+            ],
+            "title": "Tipo"
+          },
+          "bateriaPct": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Bateriapct",
+            "description": "Porcentaje de batería (0 a 100)."
+          },
+          "estado": {
+            "type": "string",
+            "enum": [
+              "disponible",
+              "en_viaje",
+              "mantenimiento"
+            ],
+            "title": "Estado"
+          },
+          "ubicacion": {
+            "$ref": "#/components/schemas/Punto"
+          }
+        },
+        "type": "object",
+        "required": [
+          "tipo",
+          "bateriaPct",
+          "estado",
+          "ubicacion"
+        ],
+        "title": "VehiculoReemplazar"
+      },
+      "VehiculoSalida": {
+        "properties": {
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "scooter",
+              "bicicleta"
+            ],
+            "title": "Tipo"
+          },
+          "bateriaPct": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Bateriapct",
+            "description": "Porcentaje de batería (0 a 100)."
+          },
+          "estado": {
+            "type": "string",
+            "enum": [
+              "disponible",
+              "en_viaje",
+              "mantenimiento"
+            ],
+            "title": "Estado"
+          },
+          "ubicacion": {
+            "$ref": "#/components/schemas/Punto"
+          },
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "localidad": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LocalidadRef"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Localidad de Bogotá donde está el vehículo (la calcula el servicio a partir de la ubicación)."
+          },
+          "actualizadoEn": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Actualizadoen"
+          },
+          "distanciaMetros": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Distanciametros",
+            "description": "Solo aparece en búsquedas por cercanía."
+          }
+        },
+        "type": "object",
+        "required": [
+          "tipo",
+          "bateriaPct",
+          "estado",
+          "ubicacion",
+          "id",
+          "actualizadoEn"
+        ],
+        "title": "VehiculoSalida"
+      },
+      "VerificacionLocalidad": {
+        "properties": {
+          "dentroDeBogota": {
+            "type": "boolean",
+            "title": "Dentrodebogota"
+          },
+          "localidad": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LocalidadRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "dentroDeBogota"
+        ],
+        "title": "VerificacionLocalidad"
+      }
+    },
+    "securitySchemes": {
+      "GatewaySecret": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-Gateway-Secret"
+      },
+      "OAuth2Gateway": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "scopes": {
+              "vehiculos:leer": "Consultar vehículos",
+              "vehiculos:escribir": "Crear, modificar, cambiar el estado y eliminar vehículos"
+            },
+            "tokenUrl": "/token"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Vehiculos",
+      "description": "Inventario de scooters y bicicletas: CRUD, búsqueda por cercanía y cambio de estado atómico."
+    },
+    {
+      "name": "Localidades",
+      "description": "Las 20 localidades de Bogotá D.C.: en qué localidad está un punto y su geometría."
+    },
+    {
+      "name": "Entorno",
+      "description": "Datos de APIs de terceros sobre la ubicación de un vehículo: clima (Open-Meteo) y dirección (Nominatim)."
+    },
+    {
+      "name": "Salud",
+      "description": "Estado del servicio (público, sin token)."
+    }
+  ]
+}
