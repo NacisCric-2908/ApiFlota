@@ -36,10 +36,18 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="API Flota - CRUD de Vehículos",
+    title="API Flota - CRUD de Vehiculos",
     version="0.1.0",
     description="Inventario de scooters y bicicletas del clúster Rodar (MongoDB, consultas geoespaciales).",
     lifespan=lifespan,
+    # Etiquetas y operationId en ASCII y sin guiones bajos: así los generadores de clientes (Java, Python...)
+    # producen nombres limpios (VehiculosApi.obtenerVehiculo) y no VehculosApi.detalleVehiculosVehiculoIdGet.
+    openapi_tags=[
+        {"name": "Vehiculos", "description": "Inventario de scooters y bicicletas: CRUD, búsqueda por cercanía y cambio de estado atómico."},
+        {"name": "Localidades", "description": "Las 20 localidades de Bogotá D.C.: en qué localidad está un punto y su geometría."},
+        {"name": "Entorno", "description": "Datos de APIs de terceros sobre la ubicación de un vehículo: clima (Open-Meteo) y dirección (Nominatim)."},
+        {"name": "Salud", "description": "Estado del servicio (público, sin token)."},
+    ],
 )
 registrar_manejadores(app)
 instalar_contrato(app)

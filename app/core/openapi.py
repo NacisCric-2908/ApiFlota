@@ -13,6 +13,8 @@ def instalar_contrato(app: FastAPI) -> None:
             version=app.version,
             description=app.description,
             routes=app.routes,
+            tags=app.openapi_tags,
+            servers=app.servers,
         )
         for operaciones in esquema["paths"].values():
             for operacion in operaciones.values():

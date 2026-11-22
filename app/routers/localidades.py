@@ -13,7 +13,7 @@ from app.schemas.localidad import LocalidadGeo, LocalidadResumen, VerificacionLo
 
 router = APIRouter(
     prefix="/localidades",
-    tags=["Localidades de Bogotá"],
+    tags=["Localidades"],
     dependencies=[Security(cabecera_gateway), Security(oauth2, scopes=[VEHICULOS_LEER])],
     responses={
         401: {"model": ErrorRespuesta, "description": "Falta la cabecera secreta del gateway"},
@@ -29,6 +29,7 @@ ESTADOS = ("disponible", "en_viaje", "mantenimiento")
 
 @router.get(
     "",
+    operation_id="listarLocalidades",
     response_model=list[LocalidadResumen],
     summary="Las 20 localidades de Bogotá con el conteo de vehículos de cada una",
 )
@@ -54,6 +55,7 @@ async def listar(localidades: Localidades, vehiculos: Vehiculos):
 # Declarada antes de /{codigo} para que "verificar" no se interprete como un código.
 @router.get(
     "/verificar",
+    operation_id="verificarLocalidad",
     response_model=VerificacionLocalidad,
     response_model_exclude_none=False,
     summary="¿En qué localidad de Bogotá está un punto?",
@@ -73,6 +75,7 @@ async def verificar(
 
 @router.get(
     "/{codigo}",
+    operation_id="obtenerLocalidad",
     response_model=LocalidadGeo,
     summary="Una localidad con su geometría (Feature GeoJSON)",
     responses={404: {"model": ErrorRespuesta, "description": "Localidad no encontrada"}},

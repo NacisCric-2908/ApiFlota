@@ -18,7 +18,7 @@ from app.schemas.externos import ClimaSalida, DireccionSalida
 
 router = APIRouter(
     prefix="/vehiculos",
-    tags=["Entorno del vehículo (APIs de terceros)"],
+    tags=["Entorno"],
     dependencies=[Security(cabecera_gateway), Security(oauth2, scopes=[VEHICULOS_LEER])],
     responses={
         401: {"model": ErrorRespuesta, "description": "Falta la cabecera secreta del gateway"},
@@ -40,6 +40,7 @@ async def _vehiculo(coleccion: AsyncCollection, vehiculo_id: str) -> dict:
 
 @router.get(
     "/{vehiculo_id}/clima",
+    operation_id="obtenerClimaVehiculo",
     response_model=ClimaSalida,
     summary="Clima actual en la ubicación del vehículo (Open-Meteo)",
     description=(
@@ -69,6 +70,7 @@ async def clima(vehiculo_id: str, coleccion: Coleccion, externos: ExternosDep):
 
 @router.get(
     "/{vehiculo_id}/direccion",
+    operation_id="obtenerDireccionVehiculo",
     response_model=DireccionSalida,
     summary="Dirección de la ubicación del vehículo (Nominatim / OpenStreetMap)",
     description=(
