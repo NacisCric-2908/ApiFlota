@@ -6,15 +6,16 @@ Estado: **versión 1.0.0** terminada (rama `main`, tag `v1.0.0`; qué incluye: [
 
 ## 1. Bloqueantes: sin esto nadie más puede usar Flota
 
-- [ ] **Subir el tag a GitHub.** El tag `v1.0.0` existe solo en local; en GitHub están las ramas pero no el tag. `git push origin v1.0.0`. Responsable: ______
-- [ ] **Dar acceso al repositorio** a Viajes y zonas y a Cuentas (o enviarles `docs/` y `app/data/localidades_bogota.geojson`). Después, reemplazar `<repo>` en [docs/integracion.md](docs/integracion.md) (sección 9, `git clone <repo>`) por la URL de GitHub. Responsable: ______
+- [x] Subir el tag `v1.0.0` a GitHub.
+- [x] Dar acceso al repositorio a los compañeros de Flota.
+- [ ] **Entregar la documentación** (`docs/`) a Viajes y zonas, Cuentas y el líder del gateway **por el canal que decidan**. Las APIs son servicios independientes que se consumen por el gateway con token: **los otros equipos no clonan ni necesitan el repositorio**; el índice [docs/README.md](docs/README.md) dice qué entregar a cada uno. Responsable: ______
 - [ ] **Probar contra Azure Cosmos DB real** (es el riesgo más alto: todo se probó contra MongoDB). Microsoft documenta que soporta lo que usamos (`$geoNear`, `$geoIntersects`, `$facet`, 2dsphere, `findAndModify`), pero nunca se corrió. Cómo:
   1. Crear una cuenta *Azure Cosmos DB for MongoDB (RU)*, modo **Serverless**, versión 7.0.
   2. Copiar la cadena de conexión del portal tal cual y correr las pruebas apuntando a ella: `docker compose --profile test run --rm -e MONGO_URI="<cadena>" test`. Las pruebas usan la base `flota_test` y se niegan a vaciar una base cuyo nombre no termine en `_test`.
   3. Si algo falla, anotar cuál consulta (probablemente `$geoNear`/`$facet`) y qué error da.
   Responsable: ______
 - [ ] **CI/CD:** pipeline por *pull request* (correr las pruebas al abrirlo) y despliegue al fusionar, como pide el enunciado. Las pruebas ya corren con un solo comando: `docker compose --profile test run --rm --build test` (equivale a `make test`) y funcionan en un runner con Docker. Responsable: ______
-- [ ] **Desplegar en Azure** según la página «Diagrama de nube» de [docs/Proyecto Rodar.drawio](docs/Proyecto%20Rodar.drawio): ACR, entorno de Container Apps **solo consumo** (no Dedicado, que cobra fijo), Cosmos DB serverless. `MONGO_URI` y `GATEWAY_SECRET` como secretos de Container Apps, nunca en la imagen. Presupuesto estimado de Flota: ≈ $6 al mes. Responsable: ______
+- [ ] **Desplegar en Azure** según la página «Diagrama de nube» de [docs/Proyecto Rodar.drawio](docs/Proyecto%20Rodar.drawio): ACR, entorno de Container Apps **solo consumo** (no Dedicado, que cobra fijo), Cosmos DB serverless. `MONGO_URI` y `GATEWAY_SECRET` como secretos de Container Apps, nunca en la imagen. Debe quedar un **ambiente de pruebas** (con los 30 vehículos semilla) para que los otros equipos prueben su integración. Presupuesto estimado de Flota: ≈ $6 al mes. Responsable: ______
 - [ ] **Datos de conexión del gateway:** completar la sección 0 de [docs/integracion.md](docs/integracion.md) (URL del gateway, ruta del token, `client_id` de cada MID) cuando el gateway esté desplegado. Responsable: ______
 
 ## 2. Gateway (a cargo del líder y su compañero)
@@ -43,7 +44,6 @@ Todavía no existe. Mismo método de trabajo: git flow con microcommits, Docker,
 
 - [ ] **Viajes y zonas:** que adopten (o ajusten) las **4 zonas propuestas** de [docs/semilla.md](docs/semilla.md). Si cambian las coordenadas, mantener las propiedades que ahí se listan (dentro de Bogotá, sin traslapes, la prohibida con un vehículo recomendable pero no todos, una franja libre).
 - [ ] **Viajes y zonas:** que validen el punto final de un viaje con `GET /localidades/verificar` **antes** de guardarlo como finalizado. Si no, Flota rechaza liberar el vehículo (`400 fuera_de_bogota`) y el viaje queda inconsistente. Está como «propuesto» en el flujo del `.drawio`: falta que ese grupo lo acepte.
-- [ ] **Entregar la documentación** a cada equipo: el índice [docs/README.md](docs/README.md) dice qué leer según el rol.
 - [ ] **Nominatim lo usan dos grupos** (Flota para la dirección, Viajes y zonas para geocodificar). Su límite es 1 petición por segundo; cada servicio usa su propio `User-Agent`, pero conviene que lo sepan.
 - [ ] Confirmar con los demás grupos el formato de error común del clúster (`{codigo, mensaje, detalle}`).
 
