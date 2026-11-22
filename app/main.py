@@ -7,7 +7,7 @@ from app.core.errors import registrar_manejadores
 from app.core.security import GatewaySecretMiddleware
 from app.db.mongo import NOMBRE_COLECCION, crear_cliente, preparar_indices
 from app.db.semilla import cargar_semilla_si_vacia
-from app.routers import health
+from app.routers import health, vehiculos
 
 
 @asynccontextmanager
@@ -32,3 +32,4 @@ app = FastAPI(
 registrar_manejadores(app)
 app.add_middleware(GatewaySecretMiddleware)
 app.include_router(health.router)
+app.include_router(vehiculos.router)
