@@ -58,3 +58,16 @@ async def crear(datos: VehiculoCrear, respuesta: Response, coleccion: Coleccion)
         raise ApiError(409, "vehiculo_duplicado", f"Ya existe el vehículo '{datos.id}'.") from None
     respuesta.headers["Location"] = f"/vehiculos/{doc['_id']}"
     return repo.a_salida(doc)
+
+
+@router.put(
+    "/{vehiculo_id}",
+    response_model=VehiculoSalida,
+    summary="Reemplazar un vehículo",
+    responses={**E400, **E404},
+)
+async def reemplazar(vehiculo_id: str, datos: VehiculoReemplazar, coleccion: Coleccion):
+    doc = await repo.reemplazar(coleccion, vehiculo_id, datos.model_dump())
+    if doc is None:
+        raise _no_encontrado(vehiculo_id)
+    return repo.a_salida(doc)
