@@ -1,5 +1,5 @@
 # Atajos. Todo corre dentro de Docker.
-.PHONY: up down logs test openapi
+.PHONY: up down logs test openapi lock add
 
 up:       ## Levanta MongoDB y la API (desarrollo, con recarga)
 	docker compose up -d --build
@@ -15,3 +15,12 @@ test:     ## Pruebas contra un MongoDB real
 
 openapi:  ## Regenera docs/openapi.json
 	docker compose run --rm --no-deps -T api python -c "import json; from app.main import app; print(json.dumps(app.openapi(), ensure_ascii=False, indent=2))" > docs/openapi.json
+
+UV = docker run --rm --user $(shell id -u):$(shell id -g) -e HOME=/tmp -e UV_CACHE_DIR=/tmp/uv-cache \
+     -v $(CURDIR):/work -w /work ghcr.io/astral-sh/uv:python3.12-bookworm-slim uv
+
+lock:     ## Re-resuelve y actualiza uv.lock
+	$(UV) lock
+
+add:      ## Agrega una dependencia: make add pkg=httpx  (dev: make add pkg="--dev pytest-cov")
+	$(UV) add $(pkg)
