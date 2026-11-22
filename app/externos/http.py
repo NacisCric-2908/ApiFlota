@@ -1,6 +1,7 @@
 """Llamadas a terceros con tiempo máximo, reintentos limitados y un único tipo de error."""
 
 import asyncio
+from collections.abc import Awaitable, Callable
 
 import httpx
 
@@ -22,6 +23,7 @@ async def get_json(
     params: dict,
     reintentos: int,
     backoff_s: float,
+    antes_de_cada_intento: Callable[[], Awaitable[None]] | None = None,
 ) -> dict:
     """GET que devuelve JSON. Reintenta solo lo transitorio: cortes de red, timeouts, 429 y 5xx.
 
@@ -30,6 +32,8 @@ async def get_json(
     """
     motivo = "desconocido"
     for intento in range(reintentos + 1):
+        if antes_de_cada_intento:
+            await antes_de_cada_intento()  # p. ej. respetar el límite de peticiones por segundo
         try:
             r = await http.get(url, params=params)
         except httpx.TransportError as e:  # incluye timeouts y fallos de conexión
