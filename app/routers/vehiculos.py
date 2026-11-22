@@ -71,3 +71,18 @@ async def reemplazar(vehiculo_id: str, datos: VehiculoReemplazar, coleccion: Col
     if doc is None:
         raise _no_encontrado(vehiculo_id)
     return repo.a_salida(doc)
+
+
+@router.delete(
+    "/{vehiculo_id}",
+    status_code=204,
+    summary="Eliminar un vehículo (no permitido si está en viaje)",
+    responses={**E404, 409: {"model": ErrorRespuesta, "description": "El vehículo está en viaje"}},
+)
+async def eliminar(vehiculo_id: str, coleccion: Coleccion):
+    resultado = await repo.eliminar(coleccion, vehiculo_id)
+    if resultado == "no_existe":
+        raise _no_encontrado(vehiculo_id)
+    if resultado == "en_viaje":
+        raise ApiError(409, "vehiculo_en_viaje", "No se puede eliminar un vehículo que está en viaje.")
+    return Response(status_code=204)
