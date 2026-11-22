@@ -1,6 +1,8 @@
+from datetime import datetime, timezone
 from math import asin, cos, radians, sin, sqrt
 
 from app.db.semilla import CENTRO_LAT, CENTRO_LNG, cargar_semilla_si_vacia, generar_vehiculos
+from app.db.vehiculos import rellenar_localidades
 
 
 def distancia_m(lng1, lat1, lng2, lat2):
@@ -31,11 +33,37 @@ def test_la_semilla_sirve_para_la_demostracion():
     assert {v["estado"] for v in vehiculos} == {"disponible", "en_viaje", "mantenimiento"}
 
 
-async def test_se_carga_solo_si_la_coleccion_esta_vacia(cliente, coleccion):
-    assert await cargar_semilla_si_vacia(coleccion) == 30
+async def test_se_carga_solo_si_la_coleccion_esta_vacia(cliente, coleccion, localidades):
+    assert await cargar_semilla_si_vacia(coleccion, localidades) == 30
     assert await coleccion.count_documents({}) == 30
-    assert await cargar_semilla_si_vacia(coleccion) == 0
+    assert await cargar_semilla_si_vacia(coleccion, localidades) == 0
     assert await coleccion.count_documents({}) == 30
+
+
+async def test_los_vehiculos_semilla_quedan_con_localidad(cliente, coleccion, localidades):
+    await cargar_semilla_si_vacia(coleccion, localidades)
+    assert await coleccion.count_documents({"localidad": {"$exists": False}}) == 0
+    r = await cliente.get("/vehiculos/veh-0001")
+    assert r.json()["localidad"]["nombre"]
+
+
+async def test_rellena_la_localidad_de_vehiculos_anteriores(cliente, coleccion, localidades):
+    await coleccion.insert_one(
+        {
+            "_id": "viejo",
+            "tipo": "scooter",
+            "bateriaPct": 50,
+            "estado": "disponible",
+            "ubicacion": {"type": "Point", "coordinates": [-74.0760, 4.5981]},
+            "actualizadoEn": datetime.now(timezone.utc),
+        }
+    )
+    assert await rellenar_localidades(coleccion, localidades) == 1
+    assert (await cliente.get("/vehiculos/viejo")).json()["localidad"] == {
+        "codigo": "17",
+        "nombre": "La Candelaria",
+    }
+    assert await rellenar_localidades(coleccion, localidades) == 0
 
 
 async def test_existe_el_indice_geoespacial(cliente, coleccion):
