@@ -35,11 +35,11 @@ Formatos que ofrece el portal (los enlaces directos se verificaron):
 
 ### El dato ya preparado (lo más cómodo)
 
-Flota ya hizo la conversión y la dejó lista: **`app/data/localidades_bogota.geojson`** en este repositorio (248 KB). Es GeoJSON válido (RFC 7946), en WGS84 (`[longitud, latitud]`), con los nombres oficiales con tilde, y sirve tal cual en MongoDB, PostGIS, Leaflet, etc. Lo que se hizo con el original:
+Flota ya hizo la conversión y **la sirve lista**: cada localidad sale como un Feature GeoJSON válido (RFC 7946) en `GET /localidades/{codigo}` (sección 3), en WGS84 (`[longitud, latitud]`) y con los nombres oficiales con tilde. Las 20 juntas pesan unos 250 KB y sirven tal cual en MongoDB, PostGIS, Leaflet, etc. **No hace falta conseguir ningún archivo**: la vía A de la sección 4 arma el GeoJSON completo con 20 llamadas a la API. Lo que se hizo con el original:
 
 - Convertir el JSON de Esri a GeoJSON y poner los 20 nombres oficiales (el original los trae en mayúsculas y sin tildes).
-- Simplificar los bordes a ~5 m y redondear a 5 decimales (~1 m), para que pese 248 KB y no 2,4 MB.
-- Simplificar **las 20 juntas** para que no queden huecos ni traslapes entre vecinas. (Simplificar cada una por separado deja huecos de hasta ~5.000 m²; un test del repositorio vigila que no vuelva a pasar.)
+- Simplificar los bordes a ~5 m y redondear a 5 decimales (~1 m), para que pesen unos 250 KB y no 2,4 MB.
+- Simplificar **las 20 juntas** para que no queden huecos ni traslapes entre vecinas. (Simplificar cada una por separado deja huecos de hasta ~5.000 m²; una prueba automática del servicio vigila que no vuelva a pasar.)
 
 Diferencia con el dato oficial (medida en PostGIS): como máximo el 0,16 % del área de una localidad (unos 5 m de borde, y es en las más pequeñas); en metros cuadrados la mayor es Sumapaz con ~45.000 m², el 0,006 % de sus 781 km². Si necesita el dato oficial sin tocar, use la vía B.
 
@@ -64,16 +64,31 @@ Alcance necesario: `vehiculos:leer`. Detalle de cada endpoint en [integracion.md
 
 Para Viajes y zonas, que ya usa PostgreSQL + PostGIS. Los dos caminos terminan con las localidades en una tabla consultable; elija uno.
 
-### Vía A: desde el GeoJSON de este repositorio (solo `psql`, nada que instalar)
+### Vía A: desde la API de Flota (sin descargar nada externo)
+
+**Paso 1: armar el GeoJSON** llamando al servicio, una vez por localidad. Necesita `jq`:
 
 ```bash
-cd app/data        # la carpeta donde está localidades_bogota.geojson
-psql "$DATABASE_URL" -f ../../docs/geo/cargar_localidades_postgis.sql
+for i in $(seq -w 1 20); do
+  curl -s "$GATEWAY/flota/localidades/$i" -H "Authorization: Bearer $TOKEN"; echo
+done | jq -c -s '{type: "FeatureCollection", features: .}' > localidades_bogota.geojson
 ```
 
-[`docs/geo/cargar_localidades_postgis.sql`](geo/cargar_localidades_postgis.sql) crea la extensión PostGIS si falta, la tabla `localidades` (`codigo`, `nombre`, `area_m2`, `geom` con índice GiST) y la tabla `bogota` (la unión de las 20, el contorno de la ciudad). Es idempotente: se puede ejecutar varias veces. Resultado verificado: `20 | t` (20 localidades, todas válidas); la unión es **una sola pieza, sin huecos**.
+> **El `-c` es imprescindible.** Deja el archivo en **una sola línea**, que es lo que espera el paso 2. Sin él, `jq` lo escribe con sangría y el cargador falla con `invalid input syntax for type json`.
 
-### Vía B: desde el dato oficial, sin tener nuestro repositorio
+Resultado verificado: el archivo así armado pesa ~254 KB, tiene las 20 localidades y es **idéntico** (geometrías y propiedades) al dato de Flota.
+
+**Paso 2: cargarlo en PostGIS** con el script [`geo/cargar_localidades_postgis.sql`](geo/cargar_localidades_postgis.sql) (viene junto a esta guía), ejecutándolo desde la carpeta donde quedó el archivo:
+
+```bash
+psql "$DATABASE_URL" -f cargar_localidades_postgis.sql
+```
+
+El script crea la extensión PostGIS si falta, la tabla `localidades` (`codigo`, `nombre`, `area_m2`, `geom` con índice GiST) y la tabla `bogota` (la unión de las 20, el contorno de la ciudad). Es idempotente: se puede ejecutar varias veces. Resultado verificado: `20 | t` (20 localidades, todas válidas); la unión es **una sola pieza, sin huecos**.
+
+Si no tiene `jq`, use la vía B.
+
+### Vía B: desde el dato oficial, sin pasar por Flota
 
 Descargar el Shapefile oficial y cargarlo con `ogr2ogr` (GDAL), que en Docker no requiere instalar nada:
 
@@ -191,7 +206,7 @@ print(localidad_de(4.5981, -74.0760))  # {'codigo': '17', 'nombre': 'La Candelar
 print(localidad_de(6.2442, -75.5812))  # None: fuera de Bogotá
 ```
 
-Instalación con uv: `uv add "shapely>=2.1"`. Las 20 geometrías caben en memoria sin problema (248 KB de archivo).
+Instalación con uv: `uv add "shapely>=2.1"`. El archivo `localidades_bogota.geojson` es el que arma la vía A de la sección 4; las 20 geometrías caben en memoria sin problema (unos 250 KB).
 
 ## 7. Zonas semilla propuestas para Viajes y zonas
 
@@ -216,14 +231,8 @@ Verificado en PostGIS: las 4 zonas quedan dentro de Bogotá, no se traslapan, cu
 | Un punto en Sumapaz cuenta como Bogotá aunque «se sienta» lejos | Sumapaz es una localidad rural enorme (781 km², el 48 % del área) que **es** Bogotá D.C. | Si solo quiere la zona urbana, excluya la localidad `20` |
 | Los nombres vienen como «USAQUEN» | Vienen del dato oficial (vía B), que no tiene tildes | Use el GeoJSON preparado (vía A) o un diccionario `codigo → nombre` |
 
-## 9. Cómo se prepararon los datos de Flota (para quien quiera reproducirlo)
+## 9. Cómo se prepararon los datos de Flota (resumen)
 
-`scripts/preparar_localidades.py` descarga el dato oficial, lo convierte y lo simplifica; **falla** si las localidades quedan con huecos o traslapes. Se ejecuta con Docker:
-
-```bash
-make localidades        # regenera app/data/localidades_bogota.geojson desde Datos Abiertos Bogotá
-```
-
-Flota guarda las localidades en una colección de MongoDB con índice `2dsphere` y resuelve «¿en qué localidad está este punto?» con `$geoIntersects`; las búsquedas por cercanía usan `$geoNear`. Detalle de la base en el diagrama «BD flota» de [Proyecto Rodar.drawio](Proyecto%20Rodar.drawio).
+Flota descarga el dato oficial, lo convierte y lo simplifica con un proceso propio, que **falla** si las localidades quedan con huecos o traslapes, y lo guarda en una colección de MongoDB con índice `2dsphere`. Resuelve «¿en qué localidad está este punto?» con `$geoIntersects` y las búsquedas por cercanía con `$geoNear`. Los demás grupos no necesitan reproducirlo: tienen el dato servido por la API (sección 3) y, si quieren el oficial sin tocar, la vía B. Detalle de la base en el diagrama «BD flota» de [Proyecto Rodar.drawio](Proyecto%20Rodar.drawio).
 
 **Atribución obligatoria** (CC BY 4.0), por ejemplo en el README o en la interfaz: *«Localidades de Bogotá D.C.: Catastro Distrital / IDECA, Datos Abiertos Bogotá, CC BY 4.0.»*
