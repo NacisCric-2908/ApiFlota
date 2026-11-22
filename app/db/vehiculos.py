@@ -92,3 +92,38 @@ async def eliminar(coleccion: AsyncCollection, vehiculo_id: str) -> str:
         return "eliminado"
     existe = await coleccion.count_documents({"_id": vehiculo_id}, limit=1)
     return "en_viaje" if existe else "no_existe"
+
+
+# Transiciones válidas, indexadas por el estado destino.
+# Un cambio al mismo estado (p. ej. en_viaje -> en_viaje) nunca es válido.
+ORIGENES_PERMITIDOS = {
+    "en_viaje": ["disponible"],
+    "disponible": ["en_viaje", "mantenimiento"],
+    "mantenimiento": ["disponible", "en_viaje"],
+}
+
+
+async def cambiar_estado(
+    coleccion: AsyncCollection, vehiculo_id: str, cambio: dict
+) -> tuple[dict | None, dict | None]:
+    """Cambia el estado de forma atómica (una sola operación con condición sobre el estado actual).
+
+    Si dos peticiones compiten por el mismo vehículo, MongoDB serializa las escrituras sobre el
+    documento: la segunda ya no cumple el filtro y no modifica nada.
+
+    Devuelve (documento_actualizado, None) si ganó, o (None, documento_actual) si no se pudo.
+    El documento actual es None cuando el vehículo no existe.
+    """
+    nuevo = {"estado": cambio["estado"], "actualizadoEn": ahora()}
+    for campo in ("ubicacion", "bateriaPct"):
+        if cambio.get(campo) is not None:
+            nuevo[campo] = cambio[campo]
+
+    actualizado = await coleccion.find_one_and_update(
+        {"_id": vehiculo_id, "estado": {"$in": ORIGENES_PERMITIDOS[cambio["estado"]]}},
+        {"$set": nuevo},
+        return_document=ReturnDocument.AFTER,
+    )
+    if actualizado:
+        return actualizado, None
+    return None, await coleccion.find_one({"_id": vehiculo_id})
