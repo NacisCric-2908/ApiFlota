@@ -1,0 +1,64 @@
+name: Despliegue a Azure
+
+# Se despliega al fusionar a main (las versiones) o a mano desde la pestaña Actions.
+# Requiere haber hecho antes la configuración de una sola vez de docs/despliegue-azure.md.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  id-token: write # para autenticarse en Azure sin contraseñas (OIDC)
+  contents: read
+
+concurrency:
+  group: despliegue-flota-crud
+  cancel-in-progress: false
+
+jobs:
+  desplegar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      GRUPO: ${{ vars.AZURE_RESOURCE_GROUP }}
+      APP: flota-crud
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Iniciar sesión en Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Construir y publicar la imagen en el registro (ACR)
+        run: |
+          ACR="$(az acr list --resource-group "$GRUPO" --query "[0].name" -o tsv)"
+          [ -n "$ACR" ] || { echo "No hay un ACR en el grupo $GRUPO: despliegue antes infra/plataforma.bicep" >&2; exit 1; }
+          az acr login --name "$ACR"
+          IMAGEN="$ACR.azurecr.io/flota-crud:${GITHUB_SHA}"
+          docker build --target prod --tag "$IMAGEN" .
+          docker push "$IMAGEN"
+          echo "IMAGEN=$IMAGEN" >> "$GITHUB_ENV"
+
+      - name: Desplegar
+        env:
+          GATEWAY_SECRET: ${{ secrets.FLOTA_CRUD_SECRET }}
+          COSMOS_EXISTENTE: ${{ vars.COSMOS_EXISTENTE }}
+        run: |
+          [ -n "$GATEWAY_SECRET" ] || { echo "Falta el secreto FLOTA_CRUD_SECRET del repositorio." >&2; exit 1; }
+          az extension add --name containerapp --upgrade --yes --only-show-errors
+          # Conserva el «modo demo» (réplicas mínimas) que se haya dejado en la aplicación.
+          MIN="$(az containerapp show --name "$APP" --resource-group "$GRUPO" --query properties.template.scale.minReplicas -o tsv 2>/dev/null || true)"
+          az deployment group create \
+            --resource-group "$GRUPO" \
+            --template-file infra/app.bicep \
+            --parameters imagen="$IMAGEN" gatewaySecret="$GATEWAY_SECRET" \
+                         replicasMinimas="${MIN:-0}" cosmosExistente="${COSMOS_EXISTENTE:-}" \
+            --output none
+
+      - name: Estado de la revisión
+        run: |
+          az containerapp revision list --name "$APP" --resource-group "$GRUPO" \
+            --query "[?properties.active].{revision:name, estado:properties.runningState, salud:properties.healthState}" --output table

@@ -4,16 +4,23 @@ Para los grupos que consumen este servicio (MID de Viajes y zonas, MID de Flota,
 
 ## 0. Datos de conexión
 
-> **Pendiente del líder del gateway:** completar esta tabla cuando el gateway esté desplegado. El resto de la guía no cambia.
+El gateway ya está definido y probado (repositorio **ApiWategay**: `docs/consumo.md` explica todo lo de abajo con más detalle). Solo faltan los valores que se conocen al desplegarlo en Azure; los entrega el líder del gateway.
 
 | Dato | Valor |
 | --- | --- |
-| URL base del gateway | _por completar_ |
-| Pedir un token | `POST {gateway}/token` (OAuth2 *client credentials*; forma exacta que publique el gateway) |
-| Prefijo de Flota | `/flota` (el gateway lo quita al reenviar) |
-| `client_id` y secreto de su MID | _por completar (los entrega el líder del gateway a cada grupo)_ |
-| Alcances de Flota | `vehiculos:leer`, `vehiculos:escribir` |
-| Ambiente de pruebas de Flota | _por completar_ (el mismo gateway, con los 30 vehículos semilla). Ver la sección 9 |
+| URL base del gateway | _por completar: la imprime el despliegue (`https://rodar-gateway.<…>.azurecontainerapps.io`)_ |
+| Pedir un token | `POST {gateway}/token` con `grant_type=client_credentials`, `client_id`, `client_secret` y (opcional) `scope`, como formulario; o `Authorization: Basic` con `client_id:client_secret`. Respuesta: `{"access_token", "token_type":"Bearer", "expires_in":900, "scope"}`. El token dura 15 minutos |
+| Usar el token | `Authorization: Bearer <access_token>` en cada petición |
+| Prefijo de Flota | `/flota` (el gateway lo quita al reenviar, salvo en `/flota/alertas`, que es del MID) |
+| `client_id` y secreto de su MID | _por completar: los entrega el líder del gateway a cada grupo por un canal seguro_ |
+| Alcances de Flota | `vehiculos:leer`, `vehiculos:escribir` (CRUD) · `recomendaciones:leer`, `alertas:leer` (MID) |
+| Ambiente de pruebas de Flota | El mismo gateway: Flota arranca con los 30 vehículos semilla. Ver la sección 9 |
+
+```bash
+TOKEN=$(curl -s -X POST "$GATEWAY/token" -d grant_type=client_credentials \
+  -d client_id=mid-viajes -d client_secret="$CLIENT_SECRET" | python3 -c "import sys,json; print(json.load(sys.stdin)['access_token'])")
+curl -H "Authorization: Bearer $TOKEN" "$GATEWAY/flota/vehiculos/veh-0001"
+```
 
 ## 1. Quién usa qué
 
